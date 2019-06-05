@@ -12,12 +12,13 @@ vecSalidas = {"127.168.0.2", "127.168.0.5", "127.168.0.9", "127.168.0.13", "127.
 entrada = "127.168.0.1"
 barrier = threading.Barrier(3)#
 # contador = 0
-nid0 = 100
-nid1 = 101
-nid2 = 102
-nid3 = 103
-nid4 = 104
+#nid0 = 100
+#nid1 = 101
+#nid2 = 102
+#nid3 = 103
+#nid4 = 104
 
+nid = [100, 101, 102, 103, 104]
 router1 = {1, "127.168.0.2"}
 router2 = {2, "127.168.0.18"}
 router3 = {3, "127.168.0.1", "127.168.0.6", "127.168.0.14", "127.168.0.17"}
@@ -55,7 +56,7 @@ class thread(threading.Thread):
         self.thread_ID = thread_ID
     def run(self):
         print(str(self.thread_ID) + "\n")
-        if(self.thread_ID == nid0):
+        if(self.thread_ID == nid[0]):
             cliente(entrada)
         else:
             servidor(entrada)
@@ -63,11 +64,18 @@ class thread(threading.Thread):
 
 # for i in vecEntradas:
 def main():
-    thread1 = thread(nid0)
-    thread2 = thread(nid1)
+    listThread=[]
+    for x in nid:
+        threadNID = thread(x)
+        listThread.append(threadNID)
 
-    thread1.start()
-    thread2.start()
+    #thread1 = thread(nid0)
+    #thread2 = thread(nid1)
+
+    #thread1.start()
+    #thread2.start()
+    for x in listThread:
+        x.start()
     #barrier.wait()
 
     print("Exit\n")
