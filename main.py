@@ -4,7 +4,7 @@ import socket
 import struct
 
 UDP_IP = "127.168.0.0"
-UDP_PORT = 5005
+UDP_PORT = 15005
 MESSAGE = "Hello, World!"
 TTL = struct.pack('b', 1)
 vecEntradas = {"127.168.0.1", "127.168.0.6", "127.168.0.10", "127.168.0.14", "127.168.0.17"}
@@ -17,7 +17,6 @@ barrier = threading.Barrier(3)#
 #nid2 = 102
 #nid3 = 103
 #nid4 = 104
-
 nid = [100, 101, 102, 103, 104]
 router1 = {1, "127.168.0.2"}
 router2 = {2, "127.168.0.18"}
@@ -26,47 +25,59 @@ router4 = {4, "127.168.0.5", "127.168.0.10"}
 router5 = {5, "127.168.0.9", "127.168.0.13"}
 
 
-def servidor(entrada):
+def servidor(entrada,t):
     #OTRA BARRERA VA ACÁ. 5 HILOS SE CREAN ACÁ
     print("SERVER")
     UDP_IP = entrada
     print("UDP target IP:", UDP_IP)
-    print("UDP target port:", UDP_PORT)
+    print("UDP target port:", UDP_PORT+t)
     print("message:", MESSAGE)
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, TTL)
-    sock.sendto(MESSAGE.encode(), (UDP_IP, UDP_PORT))
+    sock.sendto(MESSAGE.encode(), (UDP_IP, UDP_PORT+t))
 
 
-def cliente(entrada):
+def cliente(entrada ,t):
     # OTRA BARRERA VA ACÁ. 5 HILOS SE CREAN ACÁ.
     print("CLIENT")
+    print(UDP_PORT + t)
     UDP_IP = entrada
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind((UDP_IP, UDP_PORT))
+    sock.bind((UDP_IP, UDP_PORT + t))
 
     while True:
         data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
         print("received message:", data)
 
-class thread(threading.Thread):
+class threadC(threading.Thread):
     def __init__(self, thread_ID):
         threading.Thread.__init__(self)
         self.thread_ID = thread_ID
     def run(self):
-        print(str(self.thread_ID) + "\n")
-        if(self.thread_ID == nid[0]):
-            cliente(entrada)
-        else:
-            servidor(entrada)
+       # print(str(self.thread_ID) + "\n")
+       # if(self.thread_ID == nid[0]):
+        cliente(entrada , self.thread_ID-100)
+       # else:
+        #servidor(entrada, self.thread_ID-100)
         barrier.wait()
+
+class threadS(threading.Thread):
+    def __init__(self, thread_ID):
+        threading.Thread.__init__(self)
+        self.thread_ID = thread_ID
+    def run(self):
+       # print(str(self.thread_ID) + "\n")
+       # if(self.thread_ID == nid[0]):
+        #cliente(entrada , self.thread_ID-100)
+       # else:
+        servidor(entrada, self.thread_ID-200)
 
 # for i in vecEntradas:
 def main():
     listThread=[]
     for x in nid:
-        threadNID = thread(x)
+        threadNID = threadC(x)
         listThread.append(threadNID)
 
     #thread1 = thread(nid0)
@@ -76,8 +87,14 @@ def main():
     #thread2.start()
     for x in listThread:
         x.start()
-    #barrier.wait()
+       # barrier.wait()
 
+    listThread2 = []
+    for x in nid:
+        threadNID = threadS(x+100)
+        listThread2.append(threadNID)
+    for x in listThread2:
+        x.start()
     print("Exit\n")
 
 if __name__ == '__main__': main()
