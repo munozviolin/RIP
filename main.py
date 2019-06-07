@@ -27,39 +27,58 @@ router5 = {5, "127.168.0.9", "127.168.0.13"}
 
 def servidor(entrada,t):
     #OTRA BARRERA VA ACÁ. 5 HILOS SE CREAN ACÁ
-    print("SERVER")
-    UDP_IP = entrada
-    print("UDP target IP:", UDP_IP)
-    print("UDP target port:", UDP_PORT+t)
-    print("message:", MESSAGE)
+    #print("SERVER")
+    #UDP_IP = entrada
+    listaIPs = list(vecEntradas)
+    listaIPs.extend(list(vecSalidas))
+    for x in listaIPs:
+        for i in range(4):
+            UDP_IP = x
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, TTL)
+            sock.sendto(MESSAGE.encode(), (UDP_IP, UDP_PORT + i))
+    #print("UDP target IP:", UDP_IP)
+    #print("UDP target port:", UDP_PORT+t)
+    #print("message:", MESSAGE)
 
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, TTL)
-    sock.sendto(MESSAGE.encode(), (UDP_IP, UDP_PORT+t))
 
 
-def cliente(entrada ,t):
+
+def cliente(entrada ,idRouter):
     # OTRA BARRERA VA ACÁ. 5 HILOS SE CREAN ACÁ.
-    print("CLIENT")
-    print(UDP_PORT + t)
+    #print("CLIENT")
+    #print(UDP_PORT + idRouter)
     UDP_IP = entrada
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind((UDP_IP, UDP_PORT + t))
+    sock.bind((UDP_IP, UDP_PORT + idRouter))
+    router={}
+    if(idRouter == 0):
+        router = list(router1)
+    if (idRouter == 1):
+        router = list(router2)
+    if (idRouter == 2):
+        router = list(router3)
+    if (idRouter == 3):
+        router = list(router4)
+    if (idRouter == 4):
+        router = list(router5)
 
     while True:
         data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
-        print("received message:", data)
+        direccion=list(sock.getsockname())
+        #print("received addr:", addr[0])
+        a=list(addr)
+        print (a[0])
+        if( direccion[0] in router):
+            print("received message:", data)
+    del router
 
 class threadC(threading.Thread):
     def __init__(self, thread_ID):
         threading.Thread.__init__(self)
         self.thread_ID = thread_ID
     def run(self):
-       # print(str(self.thread_ID) + "\n")
-       # if(self.thread_ID == nid[0]):
         cliente(entrada , self.thread_ID-100)
-       # else:
-        #servidor(entrada, self.thread_ID-100)
         barrier.wait()
 
 class threadS(threading.Thread):
@@ -67,10 +86,6 @@ class threadS(threading.Thread):
         threading.Thread.__init__(self)
         self.thread_ID = thread_ID
     def run(self):
-       # print(str(self.thread_ID) + "\n")
-       # if(self.thread_ID == nid[0]):
-        #cliente(entrada , self.thread_ID-100)
-       # else:
         servidor(entrada, self.thread_ID-200)
 
 # for i in vecEntradas:
@@ -79,12 +94,6 @@ def main():
     for x in nid:
         threadNID = threadC(x)
         listThread.append(threadNID)
-
-    #thread1 = thread(nid0)
-    #thread2 = thread(nid1)
-
-    #thread1.start()
-    #thread2.start()
     for x in listThread:
         x.start()
        # barrier.wait()
@@ -95,6 +104,8 @@ def main():
         listThread2.append(threadNID)
     for x in listThread2:
         x.start()
+
+
     print("Exit\n")
 
 if __name__ == '__main__': main()
