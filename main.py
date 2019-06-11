@@ -28,7 +28,7 @@ router4 = {'3', '5'}
 router5 = {'3', '4'}
 tabla1 = {"10.0.1.0", "255.255.255.0", "10.0.1.1", 1}
 tabla2 = {"10.0.3.0", "255.255.255.0", "10.0.3.1", 1}
-tabla3 = {}
+tabla3 = []
 tabla4 = {"10.0.2.0", "255.255.255.0", "10.0.2.1", 1}
 tabla5 = {"10.0.4.0", "255.255.255.0", "10.0.4.1", 1}
 listasocket = []
@@ -101,11 +101,13 @@ def cliente(idRouter):
 
             if mensaje == '1':
                 red = "10.0.1.0"
+                router3IPs[0] = red
                 siguiente = "192.168.0.1"
                 vec = {red, MASK, siguiente, ''}
                 tabla3.append(vec)
             elif mensaje == '2':
                 red = "10.0.3.0"
+                router3IPs[1] = red
                 siguiente = "192.168.0.17"
                 vec = {red, MASK, siguiente, ''}
                 tabla3.append(vec)
@@ -115,6 +117,8 @@ def cliente(idRouter):
                     siguiente = "192.168.0.6"
                     vec = {red, MASK, siguiente, ''}
                     tabla3.append(vec)
+
+                    router3IPs[2] = red
                 elif idRouter == '5':
                     siguiente = "192.168.0.9"
                     vec = {red, MASK, siguiente, ''}
@@ -125,6 +129,8 @@ def cliente(idRouter):
                     siguiente = "192.168.0.14"
                     vec = {red, MASK, siguiente, ''}
                     tabla3.append(vec)
+
+                    router3IPs[3] = red
                 elif idRouter == '4':
                     siguiente = "192.168.0.10"
                     vec = {red, MASK, siguiente, ''}
