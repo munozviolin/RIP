@@ -63,7 +63,7 @@ def cliente(idRouter):
     # OTRA BARRERA VA ACÁ. 5 HILOS SE CREAN ACÁ.
     #print("CLIENT")
     print("IPCLIENTE ",listaIPCliente[idRouter])
-    UDP_IP = listaIPCliente[idRouter]
+    #UDP_IP = listaIPCliente[idRouter]
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((UDP_IP, UDP_PORT + idRouter))
     global listasocket
@@ -73,14 +73,18 @@ def cliente(idRouter):
     router = {}
     if(idRouter == 1):
         router = router1
-    if (idRouter == 2):
-        router = router2
-    if (idRouter == 3):
-        router = router3
-    if (idRouter == 4):
-        router = router4
-    if (idRouter == 5):
-        router = router5
+    else:
+        if (idRouter == 2):
+            router = router2
+        else:
+            if (idRouter == 3):
+                router = router3
+            else:
+                if (idRouter == 4):
+                    router = router4
+                else:
+                    if (idRouter == 5):
+                            router = router5
 
     while True:
         data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
@@ -92,8 +96,8 @@ def cliente(idRouter):
         if mensaje in router:
             print("YO SOY: ", idRouter)
             print("escuché a: ", mensaje)
-        else:
-            print("========", mensaje)
+        #else:
+         #   print("========", mensaje)
 
     del router
 
@@ -136,5 +140,6 @@ def main():
 
 
     print("Exit\n")
+
 
 if __name__ == '__main__': main()
