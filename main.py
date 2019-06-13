@@ -11,7 +11,11 @@ MESSAGE = "Hello, World!"
 TTL = struct.pack('b', 1)
 vecEntradas = {"127.168.0.1", "127.168.0.6", "127.168.0.10", "127.168.0.14", "127.168.0.17"}
 vecSalidas = {"127.168.0.2", "127.168.0.5", "127.168.0.9", "127.168.0.13", "127.168.0.18"}
+router1IPs = [" ", " ", " "]
+router2IPs = [" ", " ", " "]
 router3IPs = [" ", " ", " ", " "]
+router4IPs = [" ", " ", " "]
+router5IPs = [" ", " ", " "]
 barrier = threading.Barrier(3)
 nid = [100, 101, 102, 103, 104]
 listaIPCliente = ["127.168.0.1", "127.168.0.2", "127.168.0.3", "127.168.0.4", "127.168.0.5"]
@@ -20,11 +24,11 @@ router2 = {'3'}
 router3 = {'1', '2', '4', '5'}
 router4 = {'3', '5'}
 router5 = {'3', '4'}
-tabla1 = ["10.0.1.0", "255.255.255.0", "10.0.1.1", 1]
-tabla2 = ["10.0.3.0", "255.255.255.0", "10.0.3.1", 1]
+tabla1 = [{"10.0.1.0", "255.255.255.0", "10.0.1.1", 1}]
+tabla2 = [{"10.0.3.0", "255.255.255.0", "10.0.3.1", 1}]
 tabla3 = []
-tabla4 = ["10.0.2.0", "255.255.255.0", "10.0.2.1", 1]
-tabla5 = ["10.0.4.0", "255.255.255.0", "10.0.4.1", 1]
+tabla4 = [{"10.0.2.0", "255.255.255.0", "10.0.2.1", 1}]
+tabla5 = [{"10.0.4.0", "255.255.255.0", "10.0.4.1", 1}]
 listasocket = []
 
 
@@ -49,6 +53,7 @@ def servidor(idRouter):
     # print("UDP target port:", UDP_PORT+t)
     # print("message:", MESSAGE)
 
+#def sumarSaltos():
 
 def cliente(idRouter):
     global tabla1
@@ -56,7 +61,11 @@ def cliente(idRouter):
     global tabla3
     global tabla4
     global tabla5
+    global router1IPs
+    global router2IPs
     global router3IPs
+    global router4IPs
+    global router5IPs
     dir1 = " "
     dir2 = " "
     dir3 = " "
@@ -69,6 +78,7 @@ def cliente(idRouter):
     sock.bind((UDP_IP, UDP_PORT + idRouter))
     global listasocket
     listasocket.append(UDP_PORT + idRouter)
+    salto = 1
 
     idRouter += 1
     router = {}
@@ -91,6 +101,7 @@ def cliente(idRouter):
         # print("%%%% ", direccion[0])
         mensaje = data.decode()
         if mensaje in router:
+            salto += 1
             if idRouter == 5:
                 print(tabla5)
                 #print("YO SOY: ", idRouter)
@@ -100,103 +111,115 @@ def cliente(idRouter):
                 red = "10.0.1.0"
                 router3IPs[0] = red
                 siguiente = "192.168.0.1"
-                vec = {red, MASK, siguiente, ''}
+                vec = {red, MASK, siguiente, salto}
                 tabla3.append(vec)
             elif mensaje == '2' and " " in router3IPs:
                 red = "10.0.3.0"
                 router3IPs[1] = red
                 siguiente = "192.168.0.17"
-                vec = {red, MASK, siguiente, ''}
+                vec = {red, MASK, siguiente, salto}
                 tabla3.append(vec)
-            elif mensaje == '4':
+            elif mensaje == '4' :
                 red = "10.0.2.0"
                 if idRouter == 3 and " " in router3IPs:
                     siguiente = "192.168.0.6"
-                    vec = {red, MASK, siguiente, ''}
+                    vec = {red, MASK, siguiente, salto}
                     tabla3.append(vec)
 
                     router3IPs[2] = red
-                elif idRouter == 5:
+                elif idRouter == 5 and " " in router5IPs:
                     siguiente = "192.168.0.9"
-                    vec = {red, MASK, siguiente, ''}
+                    vec = {red, MASK, siguiente, salto}
                     tabla5.append(vec)
+                    router5IPs[2] = red
             elif mensaje == '5':
                 red = "10.0.4.0"
                 if idRouter == 3 and " " in router3IPs:
                     router3IPs[3] = red
                     siguiente = "192.168.0.14"
-                    vec = {red, MASK, siguiente, ''}
+                    vec = {red, MASK, siguiente, salto}
                     tabla3.append(vec)
-                elif idRouter == 4:
+                elif idRouter == 4 and " " in router4IPs:
                     siguiente = "192.168.0.10"
-                    vec = {red, MASK, siguiente, ''}
+                    vec = {red, MASK, siguiente, salto}
                     tabla4.append(vec)
+                    router4IPs[2] = red
             elif mensaje == '3':  # y comparar que router3ips.size sea menor que 4
                     if idRouter == 1:
                         siguiente = "192.168.0.2"
                         dir1 = router3IPs[1]
-                        if dir1 != " ":
+                        if dir1 != " " and " " in router1IPs:
                             red = dir1
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla1.append(vec)
+                            router1IPs[0] = red
 
                         dir2 = router3IPs[2]
-                        if dir2 != " ":
+                        if dir2 != " "and " " in router1IPs:
                             red = dir2
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla1.append(vec)
+                            router1IPs[1] = red
 
                         dir3 = router3IPs[3]
-                        if dir3 != " ":
+                        if dir3 != " "and " " in router1IPs:
                             red = dir3
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla1.append(vec)
+                            router1IPs[2] = red
                     elif idRouter == 2:
                         siguiente = "192.168.0.18"
                         dir1 = router3IPs[0]
-                        if dir1 != " ":
+                        if dir1 != " "and " " in router2IPs:
                             red = dir1
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla2.append(vec)
+                            router2IPs[0] = red
 
                         dir2 = router3IPs[2]
-                        if dir2 != " ":
+                        if dir2 != " "and " " in router2IPs:
                             red = dir2
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla2.append(vec)
+                            router2IPs[1] = red
 
                         dir3 = router3IPs[3]
-                        if dir3 != " ":
+                        if dir3 != " "and " " in router2IPs:
                             red = dir3
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla2.append(vec)
+                            router2IPs[2] = red
                     elif idRouter == 4:
                         siguiente = "192.168.0.5"
                         dir1 = router3IPs[0]
-                        if dir1 != " ":
+                        if dir1 != " "and " " in router4IPs:
                             red = dir1
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla4.append(vec)
+                            router4IPs[0] = red
 
                         dir2 = router3IPs[1]
-                        if dir2 != " ":
+                        if dir2 != " "and " " in router4IPs:
                             red = dir2
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla4.append(vec)
+                            router4IPs[1] = red
 
                     elif idRouter == 5:
                         siguiente = "192.168.0.13"
                         dir1 = router3IPs[0]
-                        if dir1 != " ":
+                        if dir1 != " "and " " in router5IPs:
                             red = dir1
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla5.append(vec)
+                            router5IPs[0] = red
 
                         dir2 = router3IPs[1]
-                        if dir2 != " ":
+                        if dir2 != " "and " " in router5IPs:
                             red = dir2
-                            vec = {red, MASK, siguiente, ''}
+                            vec = {red, MASK, siguiente, salto}
                             tabla5.append(vec)
+                            router5IPs[1] = red
 
         # else:
         #   print("========", mensaje)
