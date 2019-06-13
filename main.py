@@ -91,8 +91,8 @@ def cliente(idRouter):
         # print("%%%% ", direccion[0])
         mensaje = data.decode()
         if mensaje in router:
-            if idRouter == 3:
-                print(tabla3)
+            if idRouter == 5:
+                print(tabla5)
                 #print("YO SOY: ", idRouter)
                 #print("escuché a: ", mensaje)
 
@@ -102,7 +102,7 @@ def cliente(idRouter):
                 siguiente = "192.168.0.1"
                 vec = {red, MASK, siguiente, ''}
                 tabla3.append(vec)
-            elif mensaje == '2' and len(router3IPs) < 4:
+            elif mensaje == '2' and " " in router3IPs:
                 red = "10.0.3.0"
                 router3IPs[1] = red
                 siguiente = "192.168.0.17"
@@ -110,7 +110,7 @@ def cliente(idRouter):
                 tabla3.append(vec)
             elif mensaje == '4':
                 red = "10.0.2.0"
-                if idRouter == 3 and len(router3IPs) < 4:
+                if idRouter == 3 and " " in router3IPs:
                     siguiente = "192.168.0.6"
                     vec = {red, MASK, siguiente, ''}
                     tabla3.append(vec)
@@ -122,7 +122,7 @@ def cliente(idRouter):
                     tabla5.append(vec)
             elif mensaje == '5':
                 red = "10.0.4.0"
-                if idRouter == 3 and len(router3IPs) < 4:
+                if idRouter == 3 and " " in router3IPs:
                     router3IPs[3] = red
                     siguiente = "192.168.0.14"
                     vec = {red, MASK, siguiente, ''}
@@ -153,7 +153,7 @@ def cliente(idRouter):
                             tabla1.append(vec)
                     elif idRouter == 2:
                         siguiente = "192.168.0.18"
-                        dir2 = router3IPs[1]
+                        dir1 = router3IPs[0]
                         if dir1 != " ":
                             red = dir1
                             vec = {red, MASK, siguiente, ''}
