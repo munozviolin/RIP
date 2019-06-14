@@ -4,6 +4,8 @@ import socket
 import struct
 import time
 
+thread3=[]
+stopthread=False
 UDP_IP = "127.168.0.1"
 MASK = "255.255.255.0"
 UDP_PORT = 15005
@@ -30,7 +32,7 @@ tabla3 = []
 tabla4 = [{"10.0.2.0", "255.255.255.0", "10.0.2.1", 1}]
 tabla5 = [{"10.0.4.0", "255.255.255.0", "10.0.4.1", 1}]
 listasocket = []
-
+caido = True
 
 def servidor(idRouter):
     idRouter += 1
@@ -102,8 +104,9 @@ def cliente(idRouter):
         mensaje = data.decode()
         if mensaje in router:
             salto += 1
-            if idRouter == 5:
-                print(tabla5)
+            if idRouter == 3:
+                print("SOY #3")
+            #    print(tabla5)
                 #print("YO SOY: ", idRouter)
                 #print("escuché a: ", mensaje)
 
@@ -126,6 +129,7 @@ def cliente(idRouter):
                     vec = {red, MASK, siguiente, salto}
                     tabla3.append(vec)
 
+
                     router3IPs[2] = red
                 elif idRouter == 5 and " " in router5IPs:
                     siguiente = "192.168.0.9"
@@ -145,6 +149,7 @@ def cliente(idRouter):
                     tabla4.append(vec)
                     router4IPs[2] = red
             elif mensaje == '3':  # y comparar que router3ips.size sea menor que 4
+
                     if idRouter == 1:
                         siguiente = "192.168.0.2"
                         dir1 = router3IPs[1]
@@ -221,6 +226,7 @@ def cliente(idRouter):
                             tabla5.append(vec)
                             router5IPs[1] = red
 
+
         # else:
         #   print("========", mensaje)
 
@@ -234,6 +240,10 @@ class threadC(threading.Thread):
 
     def run(self):
         cliente(self.thread_ID - 100)
+        global stopthread
+        while True:
+            if stopthread:
+                break
         barrier.wait()
 
 
@@ -246,27 +256,49 @@ class threadS(threading.Thread):
         servidor(self.thread_ID - 200)
 
 
+
 def llamarServidor():
-    time.sleep(2)
-    listThread2 = []
-    for x in nid:
-        threadNID = threadS(x + 100)
-        listThread2.append(threadNID)
-    for x in listThread2:
-        x.start()
+    contador=1
+    global thread3
+    while (True):
+        i =0
+        global caido
+        time.sleep(2)
+        listThread2 = []
+        for x in nid:
+            threadNID = threadS(x + 100)
+            listThread2.append(threadNID)
+        for x in listThread2:
+            if contador >= 6:
+                if x.thread_ID !=202:
+                    x.start()
+                else:
+                    thread3[0].join()
+                    stopthread=True
+            elif contador < 6:
+                x.start()
+            i += 1
+
+        contador += 1
+        print("contador: ",contador)
 
 
 # for i in vecEntradas:
 def main():
+    global caido
     listThread = []
     for x in nid:
         threadNID = threadC(x)
         listThread.append(threadNID)
+        if nid==102:
+            global thread3
+            thread3.append( threadNID)
     for x in listThread:
         x.start()
     # barrier.wait()
-    while (True):
-        llamarServidor()
+    #while (True):
+    llamarServidor()
+    time.sleep(300)
 
     print("Exit\n")
 
