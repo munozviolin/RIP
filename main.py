@@ -201,254 +201,127 @@ def cliente(idRouter):
         if mensaje in router:
             if idRouter == 1 :
                # print("SOY #3")
-                print(tabla1[0])
-                print(saltoR3)
+                print(tabla1)
+                #print(saltoR3)
                 #print("YO SOY: ", idRouter)
                 #print("escuché a: ", mensaje)
 
-            if mensaje == '1' and contador < 6: #and " " in router3IPs
+            if mensaje == '1' and contador < 6 and " " in router3IPs:
                 red = "10.0.1.0"
                 router3IPs[0] = red
                 siguiente = "192.168.0.1"
                 saltos = saltoR1[0] + 1
-                if saltoR3[0] ==0 or saltos < saltoR3[0]:
-                    saltoR3[0] = saltos
-                #contarSaltos(mensaje, red, saltos)
+                saltoR3[0] = saltos
                 vec = {red, MASK, siguiente, saltos}
-                if red in tabla3:
-                    i = 0
-                    cambio = True
-                    while i < len(tabla3) and cambio == True:
-                        if red in tabla3[i] :
-                            compararSaltos(3,tabla3[i],vec)
-                    i = i + 1
-                else:
-                    tabla3.append(vec)
-            elif mensaje == '2'  and contador < 6: #and " " in router3IPs
+                tabla3.append(vec)
+
+            elif mensaje == '2'  and contador < 6 and " " in router3IPs:
                 red = "10.0.3.0"
                 router3IPs[1] = red
                 siguiente = "192.168.0.17"
                 saltos = saltoR2[1] + 1
-                if saltoR3[1] ==0 or saltos < saltoR3[1]:
-                    saltoR3[1] = saltos
-                #contarSaltos(mensaje, red, saltos)
+                saltoR3[1] = saltos
                 vec = {red, MASK, siguiente, saltos}
-                if red in tabla3:
-                    i = 0
-                    cambio = True
-                    while i < len(tabla3) and cambio == True:
-                        if red in tabla3[i] :
-                            compararSaltos(3,tabla3[i],vec)
-                    i = i + 1
-                else:
-                    tabla3.append(vec)
+                tabla3.append(vec)
+
             elif mensaje == '4' :
                 red = "10.0.2.0"
-                if idRouter == 3  and contador < 6: #and " " in router3IPs
+                if idRouter == 3  and contador < 6 and " " in router3IPs:
                     siguiente = "192.168.0.6"
                     saltos = saltoR4[2] + 1
-                    if saltoR3[2] == 0 or saltos < saltoR3[2]:
-                        saltoR3[2] = saltos
-                    # contarSaltos(mensaje, red, saltos)
+                    saltoR3[2] = saltos
                     vec = {red, MASK, siguiente, saltos}
-                    if red in tabla3:
-                        i = 0
-                        cambio = True
-                        while i < len(tabla3) and cambio == True:
-                            if red in tabla3[i]:
-                                compararSaltos(3, tabla3[i], vec)
-                        i = i + 1
-                    else:
-                        tabla3.append(vec)
+                    tabla3.append(vec)
                     router3IPs[2] = red
-                elif idRouter == 5: #and " " in router5IPs
+
+                elif idRouter == 5 and " " in router5IPs:
                     siguiente = "192.168.0.9"
                     saltos = saltoR4[2] + 1
-                    if saltoR5[0] == 0 or saltos < saltoR5[0]:
-                        saltoR5[0] = saltos
-                    # contarSaltos(mensaje, red, saltos)
+                    saltoR5[2] = saltos
                     vec = {red, MASK, siguiente, saltos}
-                    if red in tabla5:
-                        i = 0
-                        cambio = True
-                        while i < len(tabla5) and cambio == True:
-                            if red in tabla5[i]:
-                                compararSaltos(5, tabla5[i], vec)
-                        i = i + 1
-                    else:
-                        tabla5.append(vec)
+                    tabla5.append(vec)
                     router5IPs[2] = red
+
             elif mensaje == '5':
                 red = "10.0.4.0"
-                if idRouter == 3  and contador < 6: #and " " in router3IPs
+                if idRouter == 3  and contador < 6 and " " in router3IPs:
                     router3IPs[3] = red
                     siguiente = "192.168.0.14"
-                    if saltoR3[3] == 0 or saltos < saltoR3[3]:
-                        saltoR3[3] = saltos
-                    # contarSaltos(mensaje, red, saltos)
+                    saltos = saltoR5[3] +1
+                    saltoR3[3] =saltos
                     vec = {red, MASK, siguiente, saltos}
-                    if red in tabla3:
-                        i = 0
-                        cambio = True
-                        while i < len(tabla3) and cambio == True:
-                            if red in tabla3[i]:
-                                compararSaltos(3, tabla3[i], vec)
-                        i = i + 1
-                    else:
-                        tabla3.append(vec)
-                elif idRouter == 4: #and " " in router4IPs
+                    tabla3.append(vec)
+
+                elif idRouter == 4 and " " in router4IPs:
                     siguiente = "192.168.0.10"
-                    if saltoR4[3] == 0 or saltos < saltoR4[3]:
-                        saltoR4[3] = saltos
-                    # contarSaltos(mensaje, red, saltos)
+                    saltos=saltoR5[3]
+                    saltoR4[3] = saltos + 1
                     vec = {red, MASK, siguiente, saltos}
-                    if red in tabla4:
-                        i = 0
-                        cambio = True
-                        while i < len(tabla4) and cambio == True:
-                            if red in tabla4[i]:
-                                compararSaltos(4, tabla4[i], vec)
-                        i = i + 1
-                    else:
-                        tabla4.append(vec)
+                    tabla4.append(vec)
                     router4IPs[2] = red
             elif mensaje == '3':  # y comparar que router3ips.size sea menor que 4
 
                     if idRouter == 1:
                         siguiente = "192.168.0.2"
                         dir1 = router3IPs[1]
-                        if dir1 != " " :#and " " in router1IPs
+                        if dir1 != " "  and " " in router1IPs:
                             red = dir1
-                            saltos = saltoR1[1] + 1
-                            if saltoR1[1] == 0 or saltos < saltoR1[1]:
-                                saltoR1[1] = saltos
-                            # contarSaltos(mensaje, red, saltos)
+                            saltos = saltoR3[1] + 1
+                            saltoR1[1]=saltos
                             vec = {red, MASK, siguiente, saltos}
-                            if red in tabla1:
-                                i = 0
-                                cambio = True
-                                while i < len(tabla1) and cambio == True:
-                                    if red in tabla1[i]:
-                                        compararSaltos(1, tabla1[i], vec)
-                                i = i + 1
-                            else:
-                                tabla1.append(vec)
+                            tabla1.append(vec)
                             router1IPs[0] = red
 
                         dir2 = router3IPs[2]
-                        if dir2 != " ":#and " " in router1IPs
+                        if dir2 != " " and " " in router1IPs:
                             red = dir2
                             saltos = saltoR3[2] + 1
-                            if saltoR1[2] == 0 or saltos < saltoR1[2]:
-                                saltoR1[2] = saltos
-                            # contarSaltos(mensaje, red, saltos)
+
+                            saltoR1[2] = saltos
                             vec = {red, MASK, siguiente, saltos}
-                            if red in tabla1:
-                                i = 0
-                                cambio = True
-                                while i < len(tabla1) and cambio == True:
-                                    if red in tabla1[i]:
-                                        compararSaltos(1, tabla1[i], vec)
-                                i = i + 1
-                            else:
-                                tabla1.append(vec)
-                            #saltoR1[2] = saltos
-                            #vec = {red, MASK, siguiente, saltos}
-                            #tabla1.append(vec)
+                            tabla1.append(vec)
                             router1IPs[1] = red
 
                         dir3 = router3IPs[3]
-                        if dir3 != " ":#and " " in router1IPs
+                        if dir3 != " " and " " in router1IPs:
                             red = dir3
-                            saltos = saltoR1[3] + 1
-                            if saltoR1[3] == 0 or saltos < saltoR1[3]:
-                                saltoR1[3] = saltos
-                            # contarSaltos(mensaje, red, saltos)
+                            saltos = saltoR3[3] + 1
+                            saltoR1[3] = saltos
                             vec = {red, MASK, siguiente, saltos}
-                            if red in tabla1:
-                                i = 0
-                                cambio = True
-                                while i < len(tabla1) and cambio == True:
-                                    if red in tabla1[i]:
-                                        compararSaltos(1, tabla1[i], vec)
-                                i = i + 1
-                            else:
-                                tabla1.append(vec)
-                            #saltoR1[3] = saltos
-                            #vec = {red, MASK, siguiente, saltos}
-                            #tabla1.append(vec)
+                            tabla1.append(vec)
                             router1IPs[2] = red
                     elif idRouter == 2:
                         siguiente = "192.168.0.18"
                         dir1 = router3IPs[0]
-                        if dir1 != " ":#and " " in router2IPs
+                        if dir1 != " " and " " in router2IPs:
                             red = dir1
                             saltos = saltoR2[0] + 1
-                            if saltoR2[0] == 0 or saltos < saltoR2[0]:
-                                saltoR3[0] = saltos
-                            # contarSaltos(mensaje, red, saltos)
+                            saltoR2[0] = saltos
                             vec = {red, MASK, siguiente, saltos}
-                            if red in tabla2:
-                                i = 0
-                                cambio = True
-                                while i < len(tabla2) and cambio == True:
-                                    if red in tabla2[i]:
-                                        compararSaltos(2, tabla2[i], vec)
-                                i = i + 1
-                            else:
-                                tabla2.append(vec)
-                            #saltoR2[0] = saltos
-                            #vec = {red, MASK, siguiente, saltos}
-                            #tabla2.append(vec)
+                            tabla2.append(vec)
                             router2IPs[0] = red
 
                         dir2 = router3IPs[2]
-                        if dir2 != " ":#and " " in router2IPs
+                        if dir2 != " " and " " in router2IPs:
                             red = dir2
                             saltos = saltoR3[2] + 1
-                            if saltoR2[2] == 0 or saltos < saltoR3[2]:
-                                saltoR2[2] = saltos
-                            # contarSaltos(mensaje, red, saltos)
+                            saltoR2[2] = saltos
                             vec = {red, MASK, siguiente, saltos}
-                            if red in tabla2:
-                                i = 0
-                                cambio = True
-                                while i < len(tabla2) and cambio == True:
-                                    if red in tabla2[i]:
-                                        compararSaltos(2, tabla2[i], vec)
-                                i = i + 1
-                            else:
-                                tabla2.append(vec)
-                            #saltoR2[2] = saltos
-                            #vec = {red, MASK, siguiente, saltos}
-                            #tabla2.append(vec)
+                            tabla2.append(vec)
                             router2IPs[1] = red
 
                         dir3 = router3IPs[3]
-                        if dir3 != " ":#and " " in router2IPs
+                        if dir3 != " " and " " in router2IPs:
                             red = dir3
                             saltos = saltoR3[3] + 1
-                            if saltoR2[3] == 0 or saltos < saltoR2[3]:
-                                saltoR2[3] = saltos
-                            # contarSaltos(mensaje, red, saltos)
+                            saltoR2[3] = saltos
                             vec = {red, MASK, siguiente, saltos}
-                            if red in tabla2:
-                                i = 0
-                                cambio = True
-                                while i < len(tabla2) and cambio == True:
-                                    if red in tabla2[i]:
-                                        compararSaltos(2, tabla2[i], vec)
-                                i = i + 1
-                            else:
-                                tabla2.append(vec)
-                            #saltoR2[3] = saltos
-                            #vec = {red, MASK, siguiente, saltos}
-                            #tabla2.append(vec)
+                            tabla2.append(vec)
                             router2IPs[2] = red
                     elif idRouter == 4:
                         siguiente = "192.168.0.5"
                         dir1 = router3IPs[0]
-                        if dir1 != " ":#and " " in router4IPs
+                        if dir1 != " " and " " in router4IPs:
                             red = dir1
                             saltos = saltoR3[0] + 1
                             saltoR4[0] = saltos
@@ -457,7 +330,7 @@ def cliente(idRouter):
                             router4IPs[0] = red
 
                         dir2 = router3IPs[1]
-                        if dir2 != " ":#and " " in router4IPs
+                        if dir2 != " " and " " in router4IPs:
                             red = dir2
                             saltos = saltoR3[1] + 1
                             saltoR4[1] = saltos
@@ -466,7 +339,7 @@ def cliente(idRouter):
                             router4IPs[1] = red
 
                         dir2 = router3IPs[3]
-                        if dir2 != " " :#and " " in router4IPs
+                        if dir2 != " "  and " " in router4IPs:
                             red = dir2
                             saltos = saltoR3[2] + 1
                             saltoR4[2] = saltos
@@ -477,7 +350,7 @@ def cliente(idRouter):
                     elif idRouter == 5:
                         siguiente = "192.168.0.13"
                         dir1 = router3IPs[0]
-                        if dir1 != " ":#and " " in router5IPs
+                        if dir1 != " " and " " in router5IPs:
                             red = dir1
                             saltos = saltoR3[0] + 1
                             saltoR5[0] = saltos
@@ -486,7 +359,7 @@ def cliente(idRouter):
                             router5IPs[0] = red
 
                         dir2 = router3IPs[1]
-                        if dir2 != " ":#and " " in router5IPs
+                        if dir2 != " " and " " in router5IPs:
                             red = dir2
                             saltos = saltoR3[1] + 1
                             saltoR5[1] = saltos
@@ -495,7 +368,7 @@ def cliente(idRouter):
                             router5IPs[1] = red
 
                         dir3 = router3IPs[2]
-                        if dir2 != " " :#and " " in router5IPs
+                        if dir2 != " "   and " " in router5IPs:
                             red = dir2
                             saltos = saltoR3[2] + 1
                             saltoR5[2] = saltos
