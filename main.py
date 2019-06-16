@@ -199,9 +199,9 @@ def cliente(idRouter):
         # print("%%%% ", direccion[0])
         mensaje = data.decode()
         if mensaje in router:
-            if idRouter == 1 :
+            if idRouter == 4 :
                # print("SOY #3")
-                print(tabla1)
+                print(tabla4)
                 #print(saltoR3)
                 #print("YO SOY: ", idRouter)
                 #print("escuché a: ", mensaje)
@@ -236,8 +236,8 @@ def cliente(idRouter):
 
                 elif idRouter == 5 and " " in router5IPs:
                     siguiente = "192.168.0.9"
-                    saltos = saltoR4[2] + 1
-                    saltoR5[2] = saltos
+                    saltos = saltoR4[3] + 1
+                    saltoR5[3] = saltos
                     vec = {red, MASK, siguiente, saltos}
                     tabla5.append(vec)
                     router5IPs[2] = red
@@ -254,8 +254,8 @@ def cliente(idRouter):
 
                 elif idRouter == 4 and " " in router4IPs:
                     siguiente = "192.168.0.10"
-                    saltos=saltoR5[3]
-                    saltoR4[3] = saltos + 1
+                    saltos=saltoR5[3] + 1
+                    saltoR4[3] = saltos
                     vec = {red, MASK, siguiente, saltos}
                     tabla4.append(vec)
                     router4IPs[2] = red
