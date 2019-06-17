@@ -215,185 +215,246 @@ def cliente(idRouter):
         # print("%%%% ", direccion[0])
         mensaje = data.decode()
         if mensaje in router:
-            if idRouter == 4 :
+            if idRouter == 1 :
                # print("SOY #3")
-                print(tabla4)
+                print(tabla1)
                 #print(saltoR3)
                 #print("YO SOY: ", idRouter)
                 #print("escuché a: ", mensaje)
 
-            if mensaje == '1' and contador < 6 and " " in router3IPs:
+            if mensaje == '1' and contador < 6:
                 red = "10.0.1.0"
-                router3IPs[0] = red
                 siguiente = "192.168.0.1"
                 saltos = saltoR1[0] + 1
-                saltoR3[0] = saltos
-                vec = [red, MASK, siguiente, saltos]
-                tabla3.append(vec)
+                if saltoR3[0] < saltos:
+                    saltoR3[0] = saltos
+                if router3IPs[0] ==" " :
+                    router3IPs[0] = red
+                    vec = [red, MASK, siguiente, saltos]
+                    tabla3.append(vec)
+                elif  router3IPs[0] !=" " :
+                    buscarEnTabla(tabla3,red,saltos,siguiente)
 
-            elif mensaje == '2' and contador < 6 and " " in router3IPs:
+            elif mensaje == '2' and contador < 6:
                 red = "10.0.3.0"
-                router3IPs[1] = red
                 siguiente = "192.168.0.17"
                 saltos = saltoR2[1] + 1
-                saltoR3[1] = saltos
-                vec = [red, MASK, siguiente, saltos]
-                tabla3.append(vec)
+                if saltoR3[1] < saltos:
+                    saltoR3[1] = saltos
+                if  router3IPs[1] ==" " :
+                    router3IPs[1] = red
+                    vec = [red, MASK, siguiente, saltos]
+                    tabla3.append(vec)
+                elif router3IPs[1] !=" ":
+                    buscarEnTabla(tabla3,red,saltos, siguiente)
 
-            elif mensaje == '4' :
+            elif mensaje == '4':
                 red = "10.0.2.0"
-                if idRouter == 3 and contador < 6 and " " in router3IPs:
-                    siguiente = "192.168.0.6"
-                    saltos = saltoR4[2] + 1
+                siguiente = "192.168.0.6"
+                saltos = saltoR4[2] + 1
+                if saltoR3[2] < saltos:
                     saltoR3[2] = saltos
+                if idRouter == 3 and contador < 6 and router3IPs[2] ==" ":
                     vec = [red, MASK, siguiente, saltos]
                     tabla3.append(vec)
                     router3IPs[2] = red
+                elif router3IPs[2] !=" ":
+                    buscarEnTabla(tabla3,red,saltos,siguiente)
 
-                elif idRouter == 5 and " " in router5IPs:
+                if idRouter == 5:
                     siguiente = "192.168.0.9"
-                    saltos = saltoR4[3] + 1
-                    saltoR5[3] = saltos
-                    vec = [red, MASK, siguiente, saltos]
-                    tabla5.append(vec)
-                    router5IPs[2] = red
+                    saltos = saltoR4[2] + 1
+                    if saltoR5[2] < saltos:
+                         saltoR5[2] = saltos
+                    if router5IPs[2] ==" ":
+                        vec = [red, MASK, siguiente, saltos]
+                        tabla5.append(vec)
+                        router5IPs[2] = red
+                    elif  router5IPs[2] !=" ":
+                        buscarEnTabla(tabla5,red,saltos,siguiente)
 
             elif mensaje == '5':
                 red = "10.0.4.0"
-                if idRouter == 3  and contador < 6 and " " in router3IPs:
-                    router3IPs[3] = red
+                if idRouter == 3 and contador < 6:
                     siguiente = "192.168.0.14"
-                    saltos = saltoR5[3] +1
-                    saltoR3[3] =saltos
-                    vec = [red, MASK, siguiente, saltos]
-                    tabla3.append(vec)
+                    saltos = saltoR5[3] + 1
+                    if saltoR3[3] < saltos:
+                        saltoR3[3] = saltos
+                    if  router3IPs[3] ==" ":
+                        router3IPs[3] = red
+                        vec = [red, MASK, siguiente, saltos]
+                        tabla3.append(vec)
+                    elif router3IPs[3] !=" ":
+                        buscarEnTabla(tabla3, red, saltos, siguiente)
 
-                elif idRouter == 4 and " " in router4IPs:
+
+                elif idRouter == 4:
                     siguiente = "192.168.0.10"
-                    saltos=saltoR5[3] + 1
-                    saltoR4[3] = saltos
-                    vec = [red, MASK, siguiente, saltos]
-                    tabla4.append(vec)
-                    router4IPs[2] = red
+                    saltos = saltoR5[3] + 1
+                    if saltoR4[3] < saltos:
+                        saltoR4[3] = saltos
+                    if router4IPs[2]==" ":
+                        vec = [red, MASK, siguiente, saltos]
+                        tabla4.append(vec)
+                        router4IPs[2] = red
+                    elif  router4IPs[2]!=" ":
+                        buscarEnTabla(tabla4,red,saltos,siguiente)
             elif mensaje == '3':  # y comparar que router3ips.size sea menor que 4
 
                     if idRouter == 1:
                         siguiente = "192.168.0.2"
                         dir1 = router3IPs[1]
-                        if dir1 != " "  and " " in router1IPs:
-                            red = dir1
-                            saltos = saltoR3[1] + 1
-                            saltoR1[1]=saltos
+                        red = dir1
+                        saltos = saltoR3[1] + 1
+                        if saltoR1[1]< saltos:
+                            saltoR1[1] = saltos
+                        if dir1 != " "  and  router1IPs[0] ==" ":
                             vec = [red, MASK, siguiente, saltos]
                             tabla1.append(vec)
                             router1IPs[0] = red
+                        elif  router1IPs[0] !=" ":
+                            buscarEnTabla(tabla1, red,saltos,siguiente)
 
                         dir2 = router3IPs[2]
-                        if dir2 != " " and " " in router1IPs:
-                            red = dir2
-                            saltos = saltoR3[2] + 1
-
+                        red = dir2
+                        saltos = saltoR3[2] + 1
+                        if saltoR1[2]<saltos:
                             saltoR1[2] = saltos
+                        if dir2 != " " and router1IPs[1] ==" ":
+
                             vec = [red, MASK, siguiente, saltos]
                             tabla1.append(vec)
                             router1IPs[1] = red
-
-                        dir3 = router3IPs[3]
-                        if dir3 != " " and " " in router1IPs:
-                            red = dir3
-                            saltos = saltoR3[3] + 1
-                            saltoR1[3] = saltos
-                            vec = [red, MASK, siguiente, saltos]
-                            tabla1.append(vec)
-                            router1IPs[2] = red
-                    elif idRouter == 2:
-                        siguiente = "192.168.0.18"
-                        dir1 = router3IPs[0]
-                        if dir1 != " " and " " in router2IPs:
-                            red = dir1
-                            saltos = saltoR2[0] + 1
-                            saltoR2[0] = saltos
-                            vec = [red, MASK, siguiente, saltos]
-                            tabla2.append(vec)
-                            router2IPs[0] = red
-
-                        dir2 = router3IPs[2]
-                        if dir2 != " " and " " in router2IPs:
-                            red = dir2
-                            saltos = saltoR3[2] + 1
-                            saltoR2[2] = saltos
-                            vec = [red, MASK, siguiente, saltos]
-                            tabla2.append(vec)
-                            router2IPs[1] = red
+                        elif router1IPs[1] !=" ":
+                            buscarEnTabla(tabla1, red, saltos, siguiente)
 
                         dir3 = router3IPs[3]
                         red = dir3
                         saltos = saltoR3[3] + 1
-                        saltoR2[3] = saltos
+                        if saltoR1[3] <saltos:
+                            saltoR1[3] = saltos
+                        if dir3 != " " and router1IPs[2] ==" ":
+                            vec = [red, MASK, siguiente, saltos]
+                            tabla1.append(vec)
+                            router1IPs[2] = red
+                        elif router1IPs[2] != " ":
+                            buscarEnTabla(tabla1, red, saltos, siguiente)
+
+                    elif idRouter == 2:
+                        siguiente = "192.168.0.18"
+
+                        red = dir1
+                        saltos = saltoR2[0] + 1
+                        if saltoR2[0]<saltos:
+                            saltoR2[0] = saltos
+                        dir1 = router3IPs[0]
+                        if dir1 != " " and " " in router2IPs:
+                            vec = [red, MASK, siguiente, saltos]
+                            tabla2.append(vec)
+                            router2IPs[0] = red
+                        elif router2IPs[0] != " ":
+                            buscarEnTabla(tabla2, red,  saltos,siguiente)
+
+                        dir2 = router3IPs[2]
+                        red = dir2
+                        saltos = saltoR3[2] + 1
+                        if saltoR2[2]<saltos:
+                            saltoR2[2] = saltos
+                        vec = [red, MASK, siguiente, saltos]
+                        if dir2 != " " and router2IPs[1] == " ":
+                            tabla2.append(vec)
+                            router2IPs[1] = red
+                        elif router2IPs[1] != " ":
+                            buscarEnTabla(tabla2, red, saltos, siguiente)
+
+                        dir3 = router3IPs[3]
+                        red = dir3
+                        saltos = saltoR3[3] + 1
+                        if saltoR2[3] < saltos:
+                            saltoR2[3] = saltos
                         vec = [red, MASK, siguiente, saltos]
                         if dir3 != " " and router2IPs[2] == " ":
                             tabla2.append(vec)
                             router2IPs[2] = red
                         elif router2IPs[2] != " ":
-                            buscarEnTabla(tabla2, red, siguiente, saltos)
+                            buscarEnTabla(tabla2, red, saltos, siguiente)
 
                     elif idRouter == 4:
                         siguiente = "192.168.0.5"
                         dir1 = router3IPs[0]
-                        if dir1 != " " and " " in router4IPs:
-                            red = dir1
-                            saltos = saltoR3[0] + 1
+                        red = dir1
+                        saltos = saltoR3[0] + 1
+                        if saltoR4[0]<saltos:
                             saltoR4[0] = saltos
+                        if dir1 != " " and router4IPs[0]==" ":
                             vec = [red, MASK, siguiente, saltos]
                             tabla4.append(vec)
                             router4IPs[0] = red
+                        elif router4IPs[0] != " ":
+                            buscarEnTabla(tabla4, red, saltos, siguiente)
 
                         dir2 = router3IPs[1]
-                        if dir2 != " " and " " in router4IPs:
-                            red = dir2
-                            saltos = saltoR3[1] + 1
+                        red = dir2
+                        saltos = saltoR3[1] + 1
+                        if saltoR4[1]<saltos:
                             saltoR4[1] = saltos
+                        if dir2 != " " and router4IPs[1] == " ":
                             vec = [red, MASK, siguiente, saltos]
                             tabla4.append(vec)
                             router4IPs[1] = red
+                        elif router4IPs[1] != " ":
+                            buscarEnTabla(tabla4, red, saltos, siguiente)
 
                         dir2 = router3IPs[3]
-                        if dir2 != " "  and " " in router4IPs:
-                            red = dir2
-                            saltos = saltoR3[2] + 1
+                        red = dir2
+                        saltos = saltoR3[2] + 1
+                        if saltoR4[2]<saltos:
                             saltoR4[2] = saltos
+                        if dir2 != " " and router4IPs[1] == " ":
                             vec = [red, MASK, siguiente, saltos]
                             tabla4.append(vec)
-                            router4IPs[1] = red
+                            router4IPs[2] = red
+                        elif router4IPs[2] != " ":
+                            buscarEnTabla(tabla4, red, saltos, siguiente)
 
                     elif idRouter == 5:
                         siguiente = "192.168.0.13"
+
                         dir1 = router3IPs[0]
-                        if dir1 != " " and " " in router5IPs:
-                            red = dir1
-                            saltos = saltoR3[0] + 1
+                        red = dir1
+                        saltos = saltoR3[0] + 1
+                        if saltoR5[0] < saltos:
                             saltoR5[0] = saltos
+                        if dir1 != " " and router5IPs[0] ==" ":
                             vec = [red, MASK, siguiente, saltos]
                             tabla5.append(vec)
                             router5IPs[0] = red
+                        elif router5IPs[0] !=" ":
+                            buscarEnTabla(tabla5, red, saltos, siguiente)
 
                         dir2 = router3IPs[1]
-                        if dir2 != " " and " " in router5IPs:
-                            red = dir2
-                            saltos = saltoR3[1] + 1
+                        red = dir2
+                        saltos = saltoR3[1] + 1
+                        if saltoR5[1]<saltos:
                             saltoR5[1] = saltos
+                        if dir2 != " " and router5IPs[1] ==" ":
                             vec = [red, MASK, siguiente, saltos]
                             tabla5.append(vec)
                             router5IPs[1] = red
+                        elif router5IPs[1] !=" ":
+                            buscarEnTabla(tabla5, red, saltos, siguiente)
 
                         dir3 = router3IPs[2]
-                        if dir2 != " "   and " " in router5IPs:
-                            red = dir2
-                            saltos = saltoR3[2] + 1
+                        red = dir2
+                        saltos = saltoR3[2] + 1
+                        if saltoR5[2]<saltos:
                             saltoR5[2] = saltos
+                        if dir2 != " "   and  router5IPs[1] ==" ":
                             vec = [red, MASK, siguiente, saltos]
                             tabla5.append(vec)
                             router5IPs[1] = red
+                        elif router5IPs[1] !=" ":
+                            buscarEnTabla(tabla5, red, saltos, siguiente)
 
         # else:
         #   print("========", mensaje)
