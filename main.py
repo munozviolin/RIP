@@ -1,5 +1,4 @@
 import threading
-import time
 import socket
 import struct
 import time
@@ -67,9 +66,6 @@ def buscarConexiones(tabla):
 
 def servidor(idRouter):
     idRouter += 1
-    # OTRA BARRERA VA ACÁ. 5 HILOS SE CREAN ACÁ
-    # print("SERVER")
-    # UDP_IP = entrada
     listaIPs = list(vecEntradas)
     listaIPs.extend(list(vecSalidas))
     global UDP_IP
@@ -80,11 +76,6 @@ def servidor(idRouter):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, TTL)
         sock.sendto(mensaje.encode(), (UDP_IP, i))
-        # print(i)
-    # print("IP: ",x," port: ",UDP_PORT + i)
-    # print("UDP target IP:", UDP_IP)
-    # print("UDP target port:", UDP_PORT+t)
-    # print("message:", MESSAGE)
 
 def contarSaltos(idRouterVecino, dirRed, saltos):
     global redRouter1, redRouter2, redRouter4, redRouter5, router1, router2, router3, router4, router5
@@ -109,114 +100,42 @@ def contarSaltos(idRouterVecino, dirRed, saltos):
             for i in router5:
                 contarSaltos(i, dirRed, saltos)
 
-
-def compararSaltos(tabla,rutaTabla, nuevaRuta):
-    global tabla1
-    global tabla2
-    global tabla3
-    global tabla4
-    global tabla5
-    for i in rutaTabla:
-        if(len(i)<3):
-            tamañoRutaTabla=int(i)
-    for i in nuevaRuta:
-        if(len(i)<3):
-            tamañoNuevaRuta=int(i)
-
-    if tamañoRutaTabla < tamañoNuevaRuta:
-        if tabla==1:
-            i=0
-            cambio=True
-            while i < len(tabla1) and cambio == True:
-                if tabla1[i] == rutaTabla:
-                    tabla1[i] =nuevaRuta
-                    cambio=False
-            i=i+1
-        if tabla==2:
-            i=0
-            cambio=True
-            while i < len(tabla2) and cambio == True:
-                if tabla2[i] == rutaTabla:
-                    tabla2[i] =nuevaRuta
-                    cambio=False
-            i = i + 1
-
-        if tabla==1:
-            i=0
-            cambio=True
-            while i < len(tabla3) and cambio == True:
-                if tabla3[i] == rutaTabla:
-                    tabla3[i] =nuevaRuta
-                    cambio=False
-            i = i + 1
-
-        if tabla==1:
-            i=0
-            cambio=True
-            while i < len(tabla4) and cambio == True:
-                if tabla4[i] == rutaTabla:
-                    tabla4[i] =nuevaRuta
-                    cambio=False
-            i = i + 1
-
-        if tabla==1:
-            i=0
-            cambio=True
-            while i < len(tabla5) and cambio == True:
-                if tabla5[i] == rutaTabla:
-                    tabla5[i] =nuevaRuta
-                    cambio=False
-            i = i + 1
-
-
 def cliente(idRouter):
-    #global saltos
     global contador
     global tabla1, tabla2, tabla3, tabla4, tabla5
     global router1IPs, router2IPs, router3IPs, router4IPs, router5IPs
     global saltoR1, saltoR2, saltoR3, saltoR4, saltoR5
     global caido, holdDown
-
+    global listasocket
     dir1 = " "
     dir2 = " "
     dir3 = " "
     dir4 = " "
-    # OTRA BARRERA VA ACÁ. 5 HILOS SE CREAN ACÁ.
-    # print("CLIENT")
     print("IPCLIENTE ", listaIPCliente[idRouter])
-    # UDP_IP = listaIPCliente[idRouter]
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((UDP_IP, UDP_PORT + idRouter))
-    global listasocket
     listasocket.append(UDP_PORT + idRouter)
-
     idRouter += 1
     router = {}
-    if (idRouter == 1):
+    if idRouter == 1:
         router = router1
-    elif (idRouter == 2):
+    elif idRouter == 2:
         router = router2
-    elif (idRouter == 3):
+    elif idRouter == 3:
         router = router3
-    elif (idRouter == 4):
+    elif idRouter == 4:
         router = router4
     else:
         router = router5
 
     while True:
-        data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
+        data, addr = sock.recvfrom(1024)  # tamano buffer 1024
         direccion = list(sock.getsockname())
-        # print("received addr: ", data)
         a = list(addr)
-        # print("%%%% ", direccion[0])
         mensaje = data.decode()
         if mensaje in router or caido is True:
             if idRouter == 5:
-               # print("SOY #3")
                 print(tabla5)
-                #print(saltoR3)
-                #print("YO SOY: ", idRouter)
-                #print("escuché a: ", mensaje)
 
             if caido is True and holdDown is True:
                 if idRouter == 1 and '3' in router1:
@@ -310,7 +229,7 @@ def cliente(idRouter):
                         elif router4IPs[2] != " ":
                             buscarEnTabla(tabla4, red, saltos, siguiente)
 
-                elif mensaje == '3':  # y comparar que router3ips.size sea menor que 4
+                elif mensaje == '3':  
                     if idRouter == 1:
                         siguiente = "192.168.0.2"
                         dir1 = router3IPs[1]
@@ -466,9 +385,6 @@ def cliente(idRouter):
                         elif router5IPs[1] != " ":
                             buscarEnTabla(tabla5, red, saltos, siguiente)
 
-        # else:
-        #   print("========", mensaje)
-
     del router
 
 
@@ -479,10 +395,6 @@ class threadC(threading.Thread):
 
     def run(self):
         cliente(self.thread_ID - 100)
-        ##global stopthread
-        #while True:
-        #    if stopthread:
-        #        break
         barrier.wait()
 
 class threadS(threading.Thread):
@@ -498,8 +410,6 @@ def activarHoldDown():
     holdDown = True
 
 def llamarServidor():
-    #contador=1
-    #global thread3
     global contador
     global listasocket
     while (True):
@@ -519,39 +429,26 @@ def llamarServidor():
                     caido = True
                     reloj = threading.Timer(20, activarHoldDown())
                     reloj.start()
-                #else:
-                #    stopthread = True
-                #    thread3[0].join()
+                
             elif contador < 6:
                 x.start()
             i += 1
 
         contador += 1
-        print("contador: ",contador)
+        print("contador: ", contador)
 
-
-# for i in vecEntradas:
 def main():
-    #buscarEnTabla(tablaPrueba, '10.0.3.0', 4, '192.168.0.5')
-    #print(tablaPrueba)
 
     global caido
     listThread = []
     for x in nid:
         threadNID = threadC(x)
         listThread.append(threadNID)
-        #if nid==102:
-        #    global thread3
-        #    thread3.append(threadNID)
 
     for x in listThread:
         x.start()
-    # barrier.wait()
-    #while (True):
     llamarServidor()
-    #time.sleep(300)
 
     print("Exit\n")
-
 
 if __name__ == '__main__': main()

@@ -73,8 +73,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="520" column="33" lean-forward="true" selection-start-line="520" selection-start-column="33" selection-end-line="520" selection-end-column="33" />
+            <state relative-caret-position="-453">
+              <caret line="308" column="53" lean-forward="true" selection-start-line="308" selection-start-column="53" selection-end-line="308" selection-end-column="53" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -98,7 +98,12 @@
       <find>saltoR3[1]</find>
       <find>saltoR4[2]</find>
       <find>caido</find>
+      <find>tamañoNuevaRuta</find>
+      <find>compararSaltos</find>
     </findStrings>
+    <replaceStrings>
+      <replace>tamanoNuevaRuta</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -287,16 +292,16 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>467</line>
+          <line>386</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>276</line>
+          <line>195</line>
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>421</line>
+          <line>340</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
@@ -599,8 +604,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="520" column="33" lean-forward="true" selection-start-line="520" selection-start-column="33" selection-end-line="520" selection-end-column="33" />
+        <state relative-caret-position="-453">
+          <caret line="308" column="53" lean-forward="true" selection-start-line="308" selection-start-column="53" selection-end-line="308" selection-end-column="53" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
