@@ -4,6 +4,8 @@ import socket
 import struct
 import time
 
+tablaPrueba = [{'10.0.2.0', 1, '10.0.2.1', '255.255.255.0'}, {'192.168.0.5', 3, '255.255.255.0', '10.0.1.0'},
+               {'10.0.3.0', 3, '192.168.0.5', '255.255.255.0'}, {'10.0.4.0', 2, '192.168.0.10', '255.255.255.0'}]
 contador = 1
 UDP_IP = "127.168.0.1"
 MASK = "255.255.255.0"
@@ -41,6 +43,20 @@ saltoR2 = [0, 1, 0, 0]
 saltoR3 = [0, 0, 0, 0]
 saltoR4 = [0, 0, 1, 0]
 saltoR5 = [0, 0, 0, 1]
+
+def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
+    esMenor = False
+    for i in tabla:
+        if numRed in i:
+            for j in i:
+                if type(j) == int:
+                    if numSaltos < j:
+                        esMenor = True
+            if esMenor == True:
+                i[0] = numRed
+                i[1] = "255.255.255.0"
+                i[2] = siguiente
+                i[3] = numSaltos
 
 
 def servidor(idRouter):
@@ -438,6 +454,9 @@ def llamarServidor():
 
 # for i in vecEntradas:
 def main():
+    buscarEnTabla(tablaPrueba, '10.0.3.0', 1, '192.168.0.5')
+    print(tablaPrueba)
+
     global caido
     listThread = []
     for x in nid:
