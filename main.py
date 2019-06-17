@@ -43,6 +43,7 @@ saltoR3 = [0, 0, 0, 0]
 saltoR4 = [0, 0, 1, 0]
 saltoR5 = [0, 0, 0, 1]
 
+
 def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
     esMenor = False
     for i in tabla:
@@ -57,12 +58,14 @@ def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
                 i[2] = siguiente
                 i[3] = numSaltos
 
+
 def buscarConexiones(tabla):
     global router3Rutas
     for i in tabla:
         for j in router3Rutas:
             if j in i:
                 i[3] = 16
+
 
 def servidor(idRouter):
     idRouter += 1
@@ -76,6 +79,7 @@ def servidor(idRouter):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, TTL)
         sock.sendto(mensaje.encode(), (UDP_IP, i))
+
 
 def contarSaltos(idRouterVecino, dirRed, saltos):
     global redRouter1, redRouter2, redRouter4, redRouter5, router1, router2, router3, router4, router5
@@ -99,6 +103,11 @@ def contarSaltos(idRouterVecino, dirRed, saltos):
         elif idRouterVecino == 5:
             for i in router5:
                 contarSaltos(i, dirRed, saltos)
+
+
+def imprimirDatos(idRouter, tabla):
+    print("Router: ", idRouter, "\n Tabla:",tabla)
+
 
 def cliente(idRouter):
     global contador
@@ -134,8 +143,21 @@ def cliente(idRouter):
         a = list(addr)
         mensaje = data.decode()
         if mensaje in router or caido is True:
+            if idRouter == 1:
+                imprimirDatos(idRouter, tabla1)
+            time.sleep(.5)
+            if idRouter == 2:
+                imprimirDatos(idRouter, tabla2)
+            time.sleep(.5)
+            if idRouter == 3:
+                imprimirDatos(idRouter, tabla3)
+            time.sleep(.5)
+            if idRouter == 4:
+                imprimirDatos(idRouter, tabla4)
+            time.sleep(.5)
             if idRouter == 5:
-                print(tabla5)
+                imprimirDatos(idRouter, tabla5)
+            time.sleep(.5)
 
             if caido is True and holdDown is True:
                 if idRouter == 1 and '3' in router1:
@@ -337,8 +359,8 @@ def cliente(idRouter):
                         dir2 = router3IPs[3]
                         red = dir2
                         saltos = saltoR3[2] + 1
-                        if saltoR4[2] < saltos:
-                            saltoR4[2] = saltos
+                        if saltoR4[3] < saltos:
+                            saltoR4[3] = saltos
                         if dir2 != " " and router4IPs[1] == " ":
                             vec = [red, MASK, siguiente, saltos]
                             tabla4.append(vec)
@@ -397,6 +419,7 @@ class threadC(threading.Thread):
         cliente(self.thread_ID - 100)
         barrier.wait()
 
+
 class threadS(threading.Thread):
     def __init__(self, thread_ID):
         threading.Thread.__init__(self)
@@ -405,9 +428,11 @@ class threadS(threading.Thread):
     def run(self):
         servidor(self.thread_ID - 200)
 
+
 def activarHoldDown():
     global holdDown
     holdDown = True
+
 
 def llamarServidor():
     global contador
@@ -415,7 +440,7 @@ def llamarServidor():
     while (True):
         i = 0
         global caido
-        time.sleep(2)
+        time.sleep(10)
         listThread2 = []
         for x in nid:
             threadNID = threadS(x + 100)
@@ -437,6 +462,7 @@ def llamarServidor():
         contador += 1
         print("contador: ", contador)
 
+
 def main():
 
     global caido
@@ -450,5 +476,6 @@ def main():
     llamarServidor()
 
     print("Exit\n")
+
 
 if __name__ == '__main__': main()
