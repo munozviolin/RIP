@@ -4,8 +4,8 @@ import socket
 import struct
 import time
 
-tablaPrueba = [{'10.0.2.0', 1, '10.0.2.1', '255.255.255.0'}, {'192.168.0.5', 3, '255.255.255.0', '10.0.1.0'},
-               {'10.0.3.0', 3, '192.168.0.5', '255.255.255.0'}, {'10.0.4.0', 2, '192.168.0.10', '255.255.255.0'}]
+#tablaPrueba = [['10.0.2.0', 1, '10.0.2.1', '255.255.255.0'], ['192.168.0.5', 3, '255.255.255.0', '10.0.1.0'],
+#               ['10.0.3.0', 3, '192.168.0.5', '255.255.255.0'], ['10.0.4.0', 2, '192.168.0.10', '255.255.255.0']]
 contador = 1
 UDP_IP = "127.168.0.1"
 MASK = "255.255.255.0"
@@ -50,7 +50,7 @@ def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
         if numRed in i:
             for j in i:
                 if type(j) == int:
-                    if numSaltos < j:
+                    if numSaltos <= j:
                         esMenor = True
             if esMenor == True:
                 i[0] = numRed
@@ -164,6 +164,7 @@ def compararSaltos(tabla,rutaTabla, nuevaRuta):
 
 
 def cliente(idRouter):
+    #global saltos
     global tabla1
     global tabla2
     global tabla3
@@ -180,7 +181,6 @@ def cliente(idRouter):
     global saltoR3
     global saltoR4
     global saltoR5
-    saltos = 1
     dir1 = " "
     dir2 = " "
     dir3 = " "
@@ -231,7 +231,7 @@ def cliente(idRouter):
                 vec = [red, MASK, siguiente, saltos]
                 tabla3.append(vec)
 
-            elif mensaje == '2'  and contador < 6 and " " in router3IPs:
+            elif mensaje == '2' and contador < 6 and " " in router3IPs:
                 red = "10.0.3.0"
                 router3IPs[1] = red
                 siguiente = "192.168.0.17"
@@ -242,7 +242,7 @@ def cliente(idRouter):
 
             elif mensaje == '4' :
                 red = "10.0.2.0"
-                if idRouter == 3  and contador < 6 and " " in router3IPs:
+                if idRouter == 3 and contador < 6 and " " in router3IPs:
                     siguiente = "192.168.0.6"
                     saltos = saltoR4[2] + 1
                     saltoR3[2] = saltos
@@ -327,13 +327,16 @@ def cliente(idRouter):
                             router2IPs[1] = red
 
                         dir3 = router3IPs[3]
-                        if dir3 != " " and " " in router2IPs:
-                            red = dir3
-                            saltos = saltoR3[3] + 1
-                            saltoR2[3] = saltos
-                            vec = [red, MASK, siguiente, saltos]
+                        red = dir3
+                        saltos = saltoR3[3] + 1
+                        saltoR2[3] = saltos
+                        vec = [red, MASK, siguiente, saltos]
+                        if dir3 != " " and router2IPs[2] == " ":
                             tabla2.append(vec)
                             router2IPs[2] = red
+                        elif router2IPs[2] != " ":
+                            buscarEnTabla(tabla2, red, siguiente, saltos)
+
                     elif idRouter == 4:
                         siguiente = "192.168.0.5"
                         dir1 = router3IPs[0]
@@ -454,8 +457,8 @@ def llamarServidor():
 
 # for i in vecEntradas:
 def main():
-    buscarEnTabla(tablaPrueba, '10.0.3.0', 1, '192.168.0.5')
-    print(tablaPrueba)
+    #buscarEnTabla(tablaPrueba, '10.0.3.0', 4, '192.168.0.5')
+    #print(tablaPrueba)
 
     global caido
     listThread = []
