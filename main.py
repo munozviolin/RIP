@@ -25,11 +25,11 @@ router2 = {'3'}
 router3 = {'1', '2', '4', '5'}
 router4 = {'3', '5'}
 router5 = {'3', '4'}
-tabla1 = [{"10.0.1.0", "255.255.255.0", "10.0.1.1", 1}]
-tabla2 = [{"10.0.3.0", "255.255.255.0", "10.0.3.1", 1}]
+tabla1 = [["10.0.1.0", "255.255.255.0", "10.0.1.1", 1]]
+tabla2 = [["10.0.3.0", "255.255.255.0", "10.0.3.1", 1]]
 tabla3 = []
-tabla4 = [{"10.0.2.0", "255.255.255.0", "10.0.2.1", 1}]
-tabla5 = [{"10.0.4.0", "255.255.255.0", "10.0.4.1", 1}]
+tabla4 = [["10.0.2.0", "255.255.255.0", "10.0.2.1", 1]]
+tabla5 = [["10.0.4.0", "255.255.255.0", "10.0.4.1", 1]]
 listasocket = []
 caido = True
 redRouter1 = "10.0.1.0"
@@ -212,7 +212,7 @@ def cliente(idRouter):
                 siguiente = "192.168.0.1"
                 saltos = saltoR1[0] + 1
                 saltoR3[0] = saltos
-                vec = {red, MASK, siguiente, saltos}
+                vec = [red, MASK, siguiente, saltos]
                 tabla3.append(vec)
 
             elif mensaje == '2'  and contador < 6 and " " in router3IPs:
@@ -221,7 +221,7 @@ def cliente(idRouter):
                 siguiente = "192.168.0.17"
                 saltos = saltoR2[1] + 1
                 saltoR3[1] = saltos
-                vec = {red, MASK, siguiente, saltos}
+                vec = [red, MASK, siguiente, saltos]
                 tabla3.append(vec)
 
             elif mensaje == '4' :
@@ -230,7 +230,7 @@ def cliente(idRouter):
                     siguiente = "192.168.0.6"
                     saltos = saltoR4[2] + 1
                     saltoR3[2] = saltos
-                    vec = {red, MASK, siguiente, saltos}
+                    vec = [red, MASK, siguiente, saltos]
                     tabla3.append(vec)
                     router3IPs[2] = red
 
@@ -238,7 +238,7 @@ def cliente(idRouter):
                     siguiente = "192.168.0.9"
                     saltos = saltoR4[3] + 1
                     saltoR5[3] = saltos
-                    vec = {red, MASK, siguiente, saltos}
+                    vec = [red, MASK, siguiente, saltos]
                     tabla5.append(vec)
                     router5IPs[2] = red
 
@@ -249,14 +249,14 @@ def cliente(idRouter):
                     siguiente = "192.168.0.14"
                     saltos = saltoR5[3] +1
                     saltoR3[3] =saltos
-                    vec = {red, MASK, siguiente, saltos}
+                    vec = [red, MASK, siguiente, saltos]
                     tabla3.append(vec)
 
                 elif idRouter == 4 and " " in router4IPs:
                     siguiente = "192.168.0.10"
                     saltos=saltoR5[3] + 1
                     saltoR4[3] = saltos
-                    vec = {red, MASK, siguiente, saltos}
+                    vec = [red, MASK, siguiente, saltos]
                     tabla4.append(vec)
                     router4IPs[2] = red
             elif mensaje == '3':  # y comparar que router3ips.size sea menor que 4
@@ -268,7 +268,7 @@ def cliente(idRouter):
                             red = dir1
                             saltos = saltoR3[1] + 1
                             saltoR1[1]=saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla1.append(vec)
                             router1IPs[0] = red
 
@@ -278,7 +278,7 @@ def cliente(idRouter):
                             saltos = saltoR3[2] + 1
 
                             saltoR1[2] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla1.append(vec)
                             router1IPs[1] = red
 
@@ -287,7 +287,7 @@ def cliente(idRouter):
                             red = dir3
                             saltos = saltoR3[3] + 1
                             saltoR1[3] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla1.append(vec)
                             router1IPs[2] = red
                     elif idRouter == 2:
@@ -297,7 +297,7 @@ def cliente(idRouter):
                             red = dir1
                             saltos = saltoR2[0] + 1
                             saltoR2[0] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla2.append(vec)
                             router2IPs[0] = red
 
@@ -306,7 +306,7 @@ def cliente(idRouter):
                             red = dir2
                             saltos = saltoR3[2] + 1
                             saltoR2[2] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla2.append(vec)
                             router2IPs[1] = red
 
@@ -315,7 +315,7 @@ def cliente(idRouter):
                             red = dir3
                             saltos = saltoR3[3] + 1
                             saltoR2[3] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla2.append(vec)
                             router2IPs[2] = red
                     elif idRouter == 4:
@@ -325,7 +325,7 @@ def cliente(idRouter):
                             red = dir1
                             saltos = saltoR3[0] + 1
                             saltoR4[0] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla4.append(vec)
                             router4IPs[0] = red
 
@@ -334,7 +334,7 @@ def cliente(idRouter):
                             red = dir2
                             saltos = saltoR3[1] + 1
                             saltoR4[1] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla4.append(vec)
                             router4IPs[1] = red
 
@@ -343,7 +343,7 @@ def cliente(idRouter):
                             red = dir2
                             saltos = saltoR3[2] + 1
                             saltoR4[2] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla4.append(vec)
                             router4IPs[1] = red
 
@@ -354,7 +354,7 @@ def cliente(idRouter):
                             red = dir1
                             saltos = saltoR3[0] + 1
                             saltoR5[0] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla5.append(vec)
                             router5IPs[0] = red
 
@@ -363,7 +363,7 @@ def cliente(idRouter):
                             red = dir2
                             saltos = saltoR3[1] + 1
                             saltoR5[1] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla5.append(vec)
                             router5IPs[1] = red
 
@@ -372,7 +372,7 @@ def cliente(idRouter):
                             red = dir2
                             saltos = saltoR3[2] + 1
                             saltoR5[2] = saltos
-                            vec = {red, MASK, siguiente, saltos}
+                            vec = [red, MASK, siguiente, saltos]
                             tabla5.append(vec)
                             router5IPs[1] = red
 
