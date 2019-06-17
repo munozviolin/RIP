@@ -4,8 +4,6 @@ import socket
 import struct
 import time
 
-#tablaPrueba = [['10.0.2.0', 1, '10.0.2.1', '255.255.255.0'], ['192.168.0.5', 3, '255.255.255.0', '10.0.1.0'],
-#               ['10.0.3.0', 3, '192.168.0.5', '255.255.255.0'], ['10.0.4.0', 2, '192.168.0.10', '255.255.255.0']]
 contador = 1
 UDP_IP = "127.168.0.1"
 MASK = "255.255.255.0"
@@ -35,6 +33,7 @@ tabla4 = [["10.0.2.0", "255.255.255.0", "10.0.2.1", 1]]
 tabla5 = [["10.0.4.0", "255.255.255.0", "10.0.4.1", 1]]
 listasocket = []
 caido = False
+holdDown = False
 redRouter1 = "10.0.1.0"
 redRouter2 = "10.0.3.0"
 redRouter4 = "10.0.2.0"
@@ -176,6 +175,7 @@ def cliente(idRouter):
     global tabla1, tabla2, tabla3, tabla4, tabla5
     global router1IPs, router2IPs, router3IPs, router4IPs, router5IPs
     global saltoR1, saltoR2, saltoR3, saltoR4, saltoR5
+    global caido, holdDown
 
     dir1 = " "
     dir2 = " "
@@ -211,14 +211,28 @@ def cliente(idRouter):
         # print("%%%% ", direccion[0])
         mensaje = data.decode()
         if mensaje in router or caido is True:
-            if idRouter == 1 :
+            if idRouter == 5:
                # print("SOY #3")
-                print(tabla1)
+                print(tabla5)
                 #print(saltoR3)
                 #print("YO SOY: ", idRouter)
                 #print("escuché a: ", mensaje)
 
-            if caido == False:
+            if caido is True and holdDown is True:
+                if idRouter == 1 and '3' in router1:
+                    router1.remove('3')
+                    buscarConexiones(tabla1)
+                elif idRouter == 2 and '3' in router2:
+                    router2.remove('3')
+                    buscarConexiones(tabla2)
+                elif idRouter == 4 and '3' in router4:
+                    router4.remove('3')
+                    buscarConexiones(tabla4)
+                elif idRouter == 5 and '3' in router5:
+                    router5.remove('3')
+                    buscarConexiones(tabla5)
+
+            elif caido is False and holdDown is False:
                 if mensaje == '1' and contador < 6:
                     red = "10.0.1.0"
                     siguiente = "192.168.0.1"
@@ -284,7 +298,6 @@ def cliente(idRouter):
                         elif router3IPs[3] != " ":
                             buscarEnTabla(tabla3, red, saltos, siguiente)
 
-
                     elif idRouter == 4:
                         siguiente = "192.168.0.10"
                         saltos = saltoR5[3] + 1
@@ -296,8 +309,8 @@ def cliente(idRouter):
                             router4IPs[2] = red
                         elif router4IPs[2] != " ":
                             buscarEnTabla(tabla4, red, saltos, siguiente)
-                elif mensaje == '3':  # y comparar que router3ips.size sea menor que 4
 
+                elif mensaje == '3':  # y comparar que router3ips.size sea menor que 4
                     if idRouter == 1:
                         siguiente = "192.168.0.2"
                         dir1 = router3IPs[1]
@@ -340,11 +353,11 @@ def cliente(idRouter):
                     elif idRouter == 2:
                         siguiente = "192.168.0.18"
 
+                        dir1 = router3IPs[0]
                         red = dir1
                         saltos = saltoR2[0] + 1
                         if saltoR2[0] < saltos:
                             saltoR2[0] = saltos
-                        dir1 = router3IPs[0]
                         if dir1 != " " and " " in router2IPs:
                             vec = [red, MASK, siguiente, saltos]
                             tabla2.append(vec)
@@ -442,30 +455,16 @@ def cliente(idRouter):
                             buscarEnTabla(tabla5, red, saltos, siguiente)
 
                         dir3 = router3IPs[2]
-                        red = dir2
+                        red = dir3
                         saltos = saltoR3[2] + 1
                         if saltoR5[2] < saltos:
                             saltoR5[2] = saltos
-                        if dir2 != " " and router5IPs[1] == " ":
+                        if dir3 != " " and router5IPs[1] == " ":
                             vec = [red, MASK, siguiente, saltos]
                             tabla5.append(vec)
                             router5IPs[1] = red
                         elif router5IPs[1] != " ":
                             buscarEnTabla(tabla5, red, saltos, siguiente)
-
-            else:
-                if idRouter == 1 and '3' in router1:
-                    router1.remove('3')
-                    buscarConexiones(tabla1)
-                elif idRouter == 2 and '3' in router2:
-                    router2.remove('3')
-                    buscarConexiones(tabla2)
-                elif idRouter == 4 and '3' in router4:
-                    router4.remove('3')
-                    buscarConexiones(tabla4)
-                elif idRouter == 5 and '3' in router5:
-                    router5.remove('3')
-                    buscarConexiones(tabla5)
 
         # else:
         #   print("========", mensaje)
@@ -494,7 +493,9 @@ class threadS(threading.Thread):
     def run(self):
         servidor(self.thread_ID - 200)
 
-
+def activarHoldDown():
+    global holdDown
+    holdDown = True
 
 def llamarServidor():
     #contador=1
@@ -512,9 +513,12 @@ def llamarServidor():
 
         for x in listThread2:
             if contador >= 6:
-                if x.thread_ID !=202:
+                if x.thread_ID != 202:
                     x.start()
-                caido = True
+                else:
+                    caido = True
+                    reloj = threading.Timer(20, activarHoldDown())
+                    reloj.start()
                 #else:
                 #    stopthread = True
                 #    thread3[0].join()
