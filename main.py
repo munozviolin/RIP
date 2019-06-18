@@ -3,9 +3,8 @@ import socket
 import struct
 import time
 from datetime import datetime
-#import perf_counter
 
-relojS =datetime.utcnow()
+relojS = datetime.utcnow() #reloj que contara mientras que se ejecuta el algoritmo
 contador = 1 #cantidad de veces que va ejecutandose el servidor
 UDP_IP = "127.168.0.1" #direccion a partir de la que se realizara el multicast
 MASK = "255.255.255.0" #mascara por defecto
@@ -27,23 +26,23 @@ router2 = ['3'] ##routers vecinos del router 2
 router3 = ['1', '2', '4', '5'] #routers vecinos del router 3
 router4 = ['3', '5']  #routers vecinos del router 4
 router5 = ['3', '4'] #routers vecinos del router 5
-tabla1 = [["10.0.1.0", "255.255.255.0", "10.0.1.1", 1]]
-tabla2 = [["10.0.3.0", "255.255.255.0", "10.0.3.1", 1]]
-tabla3 = []
-tabla4 = [["10.0.2.0", "255.255.255.0", "10.0.2.1", 1]]
-tabla5 = [["10.0.4.0", "255.255.255.0", "10.0.4.1", 1]]
-listasocket = []
-caido = False
-holdDown = False
-redRouter1 = "10.0.1.0"
-redRouter2 = "10.0.3.0"
-redRouter4 = "10.0.2.0"
-redRouter5 = "10.0.4.0"
-saltoR1 = [1, 0, 0, 0]
-saltoR2 = [0, 1, 0, 0]
-saltoR3 = [0, 0, 0, 0]
-saltoR4 = [0, 0, 1, 0]
-saltoR5 = [0, 0, 0, 1]
+tabla1 = [["10.0.1.0", "255.255.255.0", "10.0.1.1", 1]] #datos distancia 1 de router 1
+tabla2 = [["10.0.3.0", "255.255.255.0", "10.0.3.1", 1]] #datos distancia 1 de router 2
+tabla3 = [] #datos distancia 1 de router 3
+tabla4 = [["10.0.2.0", "255.255.255.0", "10.0.2.1", 1]] #datos distancia 1 de router 4
+tabla5 = [["10.0.4.0", "255.255.255.0", "10.0.4.1", 1]] #datos distancia 1 de router 5
+listasocket = [] #lista de routers representados con sockets
+caido = False #cuando un router se da cuenta que se cayo el router 3 se usa este booleano
+holdDown = False #cuando se activa el hold timer
+redRouter1 = "10.0.1.0" #red conectada a router 1
+redRouter2 = "10.0.3.0" #red conectada a router 2
+redRouter4 = "10.0.2.0" #red conectada a router 4
+redRouter5 = "10.0.4.0" #red conectada a router 5
+saltoR1 = [1, 0, 0, 0] #utilizado para calcular la cantidad de saltos entre router 1 y los otras conexiones
+saltoR2 = [0, 1, 0, 0] #utilizado para calcular la cantidad de saltos entre router 2 y los otras conexiones
+saltoR3 = [0, 0, 0, 0] #utilizado para calcular la cantidad de saltos entre router 3 y los otras conexiones
+saltoR4 = [0, 0, 1, 0] #utilizado para calcular la cantidad de saltos entre router 4 y los otras conexiones
+saltoR5 = [0, 0, 0, 1] #utilizado para calcular la cantidad de saltos entre router 5 y los otras conexiones
 
 
 def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
