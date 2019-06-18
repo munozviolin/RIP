@@ -469,7 +469,7 @@ def llamarServidor():
         global caido
         if contador>1:
             time.sleep(10)
-        print("\n***********************************************\nNÚMERO DE CORRIDA DEL SERVIDOR: ", contador)
+        print("\n************************************************\nNÚMERO DE CORRIDA DEL SERVIDOR: ", contador)
         listThread2 = []
         for x in nid:
             threadNID = threadS(x + 100)
@@ -479,18 +479,16 @@ def llamarServidor():
             relojS = datetime.utcnow()
             #print(relojS)
             if contador >= 6:
-
                 if x.thread_ID != 202:
                     x.start()
                 else:
                    # caido = True
-                    reloj = threading.Timer(20, activarHoldDown)
-                    reloj.start()
-                
+                   print("\n---------------------------------------------------FINALIZÓ EJECUCIÓN DEL NODO 3")
+                   reloj = threading.Timer(20, activarHoldDown)
+                   reloj.start()
             elif contador < 6:
                 x.start()
             i += 1
-
         contador += 1
 
 
@@ -501,7 +499,6 @@ def main():
     for x in nid:
         threadNID = threadC(x)
         listThread.append(threadNID)
-
     for x in listThread:
         x.start()
     llamarServidor()
