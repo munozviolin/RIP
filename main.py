@@ -107,7 +107,10 @@ def contarSaltos(idRouterVecino, dirRed, saltos):
 
 
 def imprimirDatos(idRouter, tabla):
-     print("Router: ", idRouter, "\n Tabla:",tabla)
+    print("\n________________________________________________\nTABLA DE ROUTER ", idRouter, ":")
+    for i in tabla:
+        print (i)
+     #print("Router: ", idRouter, "\n Tabla:",tabla)
 
 
 def cliente(idRouter):
@@ -124,7 +127,7 @@ def cliente(idRouter):
     dir2 = " "
     dir3 = " "
     dir4 = " "
-    print("IPCLIENTE ", listaIPCliente[idRouter])
+    #print("IPCLIENTE ", listaIPCliente[idRouter])
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((UDP_IP, UDP_PORT + idRouter))
     listasocket.append(UDP_PORT + idRouter)
@@ -452,7 +455,9 @@ def llamarServidor():
     while (True):
         i = 0
         global caido
-        time.sleep(10)
+        if contador>1:
+            time.sleep(10)
+        print("\n***********************************************\nNÚMERO DE CORRIDA DEL SERVIDOR: ", contador)
         listThread2 = []
         for x in nid:
             threadNID = threadS(x + 100)
@@ -475,7 +480,6 @@ def llamarServidor():
             i += 1
 
         contador += 1
-        print("contador: ", contador)
 
 
 def main():
