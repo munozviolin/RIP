@@ -453,6 +453,7 @@ def llamarServidor():
         i = 0
         global caido
         time.sleep(10)
+        print("contador: ", contador)
         listThread2 = []
         for x in nid:
             threadNID = threadS(x + 100)
@@ -475,7 +476,7 @@ def llamarServidor():
             i += 1
 
         contador += 1
-        print("contador: ", contador)
+
 
 
 def main():
