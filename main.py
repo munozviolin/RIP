@@ -44,7 +44,7 @@ saltoR3 = [0, 0, 0, 0] #utilizado para calcular la cantidad de saltos entre rout
 saltoR4 = [0, 0, 1, 0] #utilizado para calcular la cantidad de saltos entre router 4 y los otras conexiones
 saltoR5 = [0, 0, 0, 1] #utilizado para calcular la cantidad de saltos entre router 5 y los otras conexiones
 
-
+#
 def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
     esMenor = False
     for i in tabla:
@@ -81,7 +81,9 @@ def servidor(idRouter):
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, TTL)
         sock.sendto(mensaje.encode(), (UDP_IP, i))
 
-
+#Metodo que compara el numero de saltos para una nueva ruta y una ya existente para realizar un cambio
+#REQUIERE:
+#           idRouterVecino: ID del router vecino por el cual debe desplazarme para avanzar
 def contarSaltos(idRouterVecino, dirRed, saltos):
     global redRouter1, redRouter2, redRouter4, redRouter5, router1, router2, router3, router4, router5
 
@@ -106,10 +108,20 @@ def contarSaltos(idRouterVecino, dirRed, saltos):
                 contarSaltos(i, dirRed, saltos)
 
 
+#Metodo que imprime la informacion correspondiente de cada tabla de los servidores
+#REQUIERE:
+#           idRouter: el numero de router que es representado por el hilo
+#           tabla: la tabla que corresponde a la informacion que se va a imprimir
 def imprimirDatos(idRouter, tabla):
-     print("Router: ", idRouter, "\n Tabla:",tabla)
+    print("\n________________________________________________\nTABLA DE ROUTER ", idRouter, ":")
+    for i in tabla:
+        print (i)
+     #print("Router: ", idRouter, "\n Tabla:",tabla)
 
 
+#Metodo que simula la operacion de RIP para cada servidor
+#REQUIERE:
+#           idRouter: el numero de router que es representado por el hilo
 def cliente(idRouter):
     global contador
     global tabla1, tabla2, tabla3, tabla4, tabla5
@@ -124,7 +136,7 @@ def cliente(idRouter):
     dir2 = " "
     dir3 = " "
     dir4 = " "
-    print("IPCLIENTE ", listaIPCliente[idRouter])
+    #print("IPCLIENTE ", listaIPCliente[idRouter])
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((UDP_IP, UDP_PORT + idRouter))
     listasocket.append(UDP_PORT + idRouter)
@@ -421,6 +433,7 @@ def cliente(idRouter):
     del router
 
 
+#Metodo que crea y ejecuta los hilos cliente
 class threadC(threading.Thread):
     def __init__(self, thread_ID):
         threading.Thread.__init__(self)
@@ -431,6 +444,7 @@ class threadC(threading.Thread):
         barrier.wait()
 
 
+#Metodo que crea y ejecuta los hilos servidor
 class threadS(threading.Thread):
     def __init__(self, thread_ID):
         threading.Thread.__init__(self)
@@ -440,11 +454,12 @@ class threadS(threading.Thread):
         servidor(self.thread_ID - 200)
 
 
+#Metodo que indica que se a realizado el tiempo de espera para el HOLDDOWN TIMER
 def activarHoldDown():
     global holdDown
     holdDown = True
 
-
+#Metodo que crea los hilos que ejecutan los servidores que envian la informacion de los routes y espera 10 segundos entre ciclos
 def llamarServidor():
     global contador
     global listasocket
@@ -452,8 +467,9 @@ def llamarServidor():
     while (True):
         i = 0
         global caido
-        time.sleep(10)
-        print("contador: ", contador)
+        if contador>1:
+            time.sleep(10)
+        print("\n***********************************************\nNÚMERO DE CORRIDA DEL SERVIDOR: ", contador)
         listThread2 = []
         for x in nid:
             threadNID = threadS(x + 100)
@@ -478,9 +494,8 @@ def llamarServidor():
         contador += 1
 
 
-
+#Metodo main que inicializa la simulacion
 def main():
-
     global caido
     listThread = []
     for x in nid:
