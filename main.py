@@ -497,10 +497,10 @@ def llamarServidor():
                 if x.thread_ID != 202:
                     x.start()
                 else:
-                   # caido = True
-                   print("\n---------------------------------------------------FINALIZÓ EJECUCIÓN DEL NODO 3")
-                   reloj = threading.Timer(20, activarHoldDown)
-                   reloj.start()
+                   if contador == 6:
+                       print("\n---------------------------------------------------FINALIZÓ EJECUCIÓN DEL NODO 3")
+                       reloj = threading.Timer(20, activarHoldDown)
+                       reloj.start()
             elif contador < 6:
                 x.start()
             i += 1
