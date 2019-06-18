@@ -2,29 +2,31 @@ import threading
 import socket
 import struct
 import time
+from datetime import datetime
+#import perf_counter
 
-contador = 1
-UDP_IP = "127.168.0.1"
-MASK = "255.255.255.0"
-UDP_PORT = 15005
-MESSAGE = "Hello, World!"
-TTL = struct.pack('b', 1)
-vecEntradas = {"127.168.0.1", "127.168.0.6", "127.168.0.10", "127.168.0.14", "127.168.0.17"}
-vecSalidas = {"127.168.0.2", "127.168.0.5", "127.168.0.9", "127.168.0.13", "127.168.0.18"}
-router1IPs = [" ", " ", " "]
-router2IPs = [" ", " ", " "]
-router3IPs = [" ", " ", " ", " "]
-router4IPs = [" ", " ", " "]
-router5IPs = [" ", " ", " "]
-barrier = threading.Barrier(3)
-router3Rutas = ["192.168.0.2", "192.168.0.5", "192.168.0.13", "192.168.0.18"]
-nid = [100, 101, 102, 103, 104]
-listaIPCliente = ["127.168.0.1", "127.168.0.2", "127.168.0.3", "127.168.0.4", "127.168.0.5"]
-router1 = ['3']
-router2 = ['3']
-router3 = ['1', '2', '4', '5']
-router4 = ['3', '5']
-router5 = ['3', '4']
+relojS =datetime.utcnow()
+contador = 1 #cantidad de veces que va ejecutandose el servidor
+UDP_IP = "127.168.0.1" #direccion a partir de la que se realizara el multicast
+MASK = "255.255.255.0" #mascara por defecto
+UDP_PORT = 15005 #puerto requerido para la transmision multicast
+TTL = struct.pack('b', 1) #tiempo de vida
+vecEntradas = {"127.168.0.1", "127.168.0.6", "127.168.0.10", "127.168.0.14", "127.168.0.17"} #primer conjunto de IPs
+vecSalidas = {"127.168.0.2", "127.168.0.5", "127.168.0.9", "127.168.0.13", "127.168.0.18"} #segundo conjunto de IPs
+router1IPs = [" ", " ", " "] #almacenara IPs que se comunican con router 1
+router2IPs = [" ", " ", " "] #almacenara IPs que se comunican con router 2
+router3IPs = [" ", " ", " ", " "] #almacenara IPs que se comunican con router 3
+router4IPs = [" ", " ", " "] #almacenara IPs que se comunican con router 4
+router5IPs = [" ", " ", " "] #almacenara IPs que se comunican con router 5
+barrier = threading.Barrier(3) #barrera para programacion con varios hilos
+router3Rutas = ["192.168.0.2", "192.168.0.5", "192.168.0.13", "192.168.0.18"] #IPs por las que puede transmitir router 3
+nid = [100, 101, 102, 103, 104] #id que identificara a cada hilo
+listaIPCliente = ["127.168.0.1", "127.168.0.2", "127.168.0.3", "127.168.0.4", "127.168.0.5"] #IPs clientes
+router1 = ['3'] #routers vecinos del router 1
+router2 = ['3'] ##routers vecinos del router 2
+router3 = ['1', '2', '4', '5'] #routers vecinos del router 3
+router4 = ['3', '5']  #routers vecinos del router 4
+router5 = ['3', '4'] #routers vecinos del router 5
 tabla1 = [["10.0.1.0", "255.255.255.0", "10.0.1.1", 1]]
 tabla2 = [["10.0.3.0", "255.255.255.0", "10.0.3.1", 1]]
 tabla3 = []
@@ -106,7 +108,7 @@ def contarSaltos(idRouterVecino, dirRed, saltos):
 
 
 def imprimirDatos(idRouter, tabla):
-    print("Router: ", idRouter, "\n Tabla:",tabla)
+     print("Router: ", idRouter, "\n Tabla:",tabla)
 
 
 def cliente(idRouter):
@@ -116,6 +118,9 @@ def cliente(idRouter):
     global saltoR1, saltoR2, saltoR3, saltoR4, saltoR5
     global caido, holdDown
     global listasocket
+    global reloj3
+    global relojS
+    reloj3=datetime.utcnow()
     dir1 = " "
     dir2 = " "
     dir3 = " "
@@ -142,6 +147,12 @@ def cliente(idRouter):
         direccion = list(sock.getsockname())
         a = list(addr)
         mensaje = data.decode()
+        resta= relojS- reloj3
+        #print(resta.total_seconds())
+        if (resta.total_seconds())  > 13:
+            caido = True
+        #else:
+        #    print(relojS -reloj3)
         if mensaje in router or caido is True:
             if idRouter == 1:
                 imprimirDatos(idRouter, tabla1)
@@ -251,7 +262,8 @@ def cliente(idRouter):
                         elif router4IPs[2] != " ":
                             buscarEnTabla(tabla4, red, saltos, siguiente)
 
-                elif mensaje == '3':  
+                elif mensaje == '3':
+                    reloj3 = datetime.utcnow()
                     if idRouter == 1:
                         siguiente = "192.168.0.2"
                         dir1 = router3IPs[1]
@@ -437,6 +449,7 @@ def activarHoldDown():
 def llamarServidor():
     global contador
     global listasocket
+    global relojS
     while (True):
         i = 0
         global caido
@@ -447,12 +460,15 @@ def llamarServidor():
             listThread2.append(threadNID)
 
         for x in listThread2:
+            relojS = datetime.utcnow()
+            #print(relojS)
             if contador >= 6:
+
                 if x.thread_ID != 202:
                     x.start()
                 else:
-                    caido = True
-                    reloj = threading.Timer(20, activarHoldDown())
+                   # caido = True
+                    reloj = threading.Timer(20, activarHoldDown)
                     reloj.start()
                 
             elif contador < 6:
