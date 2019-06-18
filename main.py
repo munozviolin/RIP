@@ -44,7 +44,13 @@ saltoR3 = [0, 0, 0, 0] #utilizado para calcular la cantidad de saltos entre rout
 saltoR4 = [0, 0, 1, 0] #utilizado para calcular la cantidad de saltos entre router 4 y los otras conexiones
 saltoR5 = [0, 0, 0, 1] #utilizado para calcular la cantidad de saltos entre router 5 y los otras conexiones
 
-#
+
+#Metodo que busca en tablas de router ya existentes para determinar si existen mejores rutas
+#REQUIERE:
+#           tabla: Tabla RIP de un determinado router
+#           numRed: numero de red que se desea determinar si nueva ruta es mejor a la existente
+#           numSaltos: numero de saltos para la nueva ruta
+#           siguiente: direccion al siguiente equipo para llegar a la red
 def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
     esMenor = False
     for i in tabla:
@@ -59,7 +65,9 @@ def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
                 i[2] = siguiente
                 i[3] = numSaltos
 
-
+#Metodo que identifica que informacion proviene de router 3 para actualizar el numero de saltos a 16
+#REQUISITOS:
+#          tabla: corresponde a la tabla que va a ser actualizada
 def buscarConexiones(tabla):
     global router3Rutas
     for i in tabla:
@@ -68,6 +76,9 @@ def buscarConexiones(tabla):
                 i[3] = 16
 
 
+#Metodo que simulan la funcion de envio de datos de los Routers
+#REQUIERE:
+#           idRouterVecino: ID del router que se rrepresenta
 def servidor(idRouter):
     idRouter += 1
     listaIPs = list(vecEntradas)
@@ -81,9 +92,11 @@ def servidor(idRouter):
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, TTL)
         sock.sendto(mensaje.encode(), (UDP_IP, i))
 
-#Metodo que compara el numero de saltos para una nueva ruta y una ya existente para realizar un cambio
+#Metodo que cuenta la cantidad de saltos necesarios para llegar a una red desde un router
 #REQUIERE:
 #           idRouterVecino: ID del router vecino por el cual debe desplazarme para avanzar
+#           dirRed: direccion de red que corresponde a la red que desea ser almacenado
+#           saltos: corresponde a al cantidad de saltos que una posible ruta deberia necesitar para llegar  su detino
 def contarSaltos(idRouterVecino, dirRed, saltos):
     global redRouter1, redRouter2, redRouter4, redRouter5, router1, router2, router3, router4, router5
 
@@ -110,7 +123,7 @@ def contarSaltos(idRouterVecino, dirRed, saltos):
 
 #Metodo que imprime la informacion correspondiente de cada tabla de los servidores
 #REQUIERE:
-#           idRouter: el numero de router que es representado por el hilo
+#           idRouter: el ID de router que es representado por el hilo
 #           tabla: la tabla que corresponde a la informacion que se va a imprimir
 def imprimirDatos(idRouter, tabla):
     print("\n________________________________________________\nTABLA DE ROUTER ", idRouter, ":")
@@ -121,7 +134,7 @@ def imprimirDatos(idRouter, tabla):
 
 #Metodo que simula la operacion de RIP para cada servidor
 #REQUIERE:
-#           idRouter: el numero de router que es representado por el hilo
+#           idRouter: el ID de router que es representado por el hilo
 def cliente(idRouter):
     global contador
     global tabla1, tabla2, tabla3, tabla4, tabla5
@@ -458,6 +471,8 @@ class threadS(threading.Thread):
 def activarHoldDown():
     global holdDown
     holdDown = True
+    print("\n---------------------------------------------------HOLD TIMER, finalizaron los 20 segundos")
+
 
 #Metodo que crea los hilos que ejecutan los servidores que envian la informacion de los routes y espera 10 segundos entre ciclos
 def llamarServidor():
