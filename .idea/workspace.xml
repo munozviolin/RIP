@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cefdf40b-7406-4dd4-b62f-8e74e43cefe4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
@@ -74,8 +73,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="502" column="36" lean-forward="true" selection-start-line="502" selection-start-column="36" selection-end-line="502" selection-end-column="36" />
+            <state relative-caret-position="3">
+              <caret line="537" lean-forward="true" selection-start-line="537" selection-end-line="537" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -103,6 +102,9 @@
       <find>compararSaltos</find>
       <find>CONTADOR</find>
       <find>activarHoldDown</find>
+      <find>13</find>
+      <find>192.168.0.18</find>
+      <find>buscarConexiones</find>
     </findStrings>
     <replaceStrings>
       <replace>tamanoNuevaRuta</replace>
@@ -231,7 +233,7 @@
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49925596" weight="0.3291592" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5003903" side_tool="true" weight="1.0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49960968" visible="true" weight="0.470483" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49960968" visible="true" weight="0.89266545" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49726775" weight="0.21645796" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3298969" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -295,31 +297,34 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>408</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>217</line>
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>362</line>
-          <option name="timeStamp" value="1" />
+          <line>204</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="2" />
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="thread3" language="Python" />
         <watch expression="tabla3" language="Python" />
         <watch expression="saltoR4" language="Python" />
+        <watch expression="caido" language="Python" />
+        <watch expression="holdDown" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>holdDown</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>caido</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>saltoR4</expression-string>
         <language-id>Python</language-id>
@@ -598,8 +603,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="502" column="36" lean-forward="true" selection-start-line="502" selection-start-column="36" selection-end-line="502" selection-end-column="36" />
+        <state relative-caret-position="3">
+          <caret line="537" lean-forward="true" selection-start-line="537" selection-end-line="537" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>

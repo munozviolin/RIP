@@ -48,7 +48,7 @@ saltoR5 = [0, 0, 0, 1] #utilizado para calcular la cantidad de saltos entre rout
 #Metodo que busca en tablas de router ya existentes para determinar si existen mejores rutas
 #REQUIERE:
 #           tabla: Tabla RIP de un determinado router
-#           numRed: numero de red que se desea determinar si nueva ruta es mejor a la existente
+#           numRed: numero de red que se desea determinar si la nueva ruta es mejor a la existente
 #           numSaltos: numero de saltos para la nueva ruta
 #           siguiente: direccion al siguiente equipo para llegar a la red
 def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
@@ -69,16 +69,19 @@ def buscarEnTabla(tabla, numRed, numSaltos, siguiente):
 #REQUISITOS:
 #          tabla: corresponde a la tabla que va a ser actualizada
 def buscarConexiones(tabla):
+    temp = False
     global router3Rutas
     for i in tabla:
         for j in router3Rutas:
             if j in i:
                 i[3] = 16
+                temp = True
+    return temp
 
 
-#Metodo que simulan la funcion de envio de datos de los Routers
+#Metodo que simulan la funcion de envio de datos de los routers
 #REQUIERE:
-#           idRouterVecino: ID del router que se rrepresenta
+#           idRouterVecino: ID del router que se representa
 def servidor(idRouter):
     idRouter += 1
     listaIPs = list(vecEntradas)
@@ -94,9 +97,9 @@ def servidor(idRouter):
 
 #Metodo que cuenta la cantidad de saltos necesarios para llegar a una red desde un router
 #REQUIERE:
-#           idRouterVecino: ID del router vecino por el cual debe desplazarme para avanzar
+#           idRouterVecino: ID del router vecino por el cual debe desplazarse para avanzar
 #           dirRed: direccion de red que corresponde a la red que desea ser almacenado
-#           saltos: corresponde a al cantidad de saltos que una posible ruta deberia necesitar para llegar  su detino
+#           saltos: corresponde a la cantidad de saltos que una posible ruta deberia necesitar para llegar a su detino
 def contarSaltos(idRouterVecino, dirRed, saltos):
     global redRouter1, redRouter2, redRouter4, redRouter5, router1, router2, router3, router4, router5
 
@@ -132,7 +135,7 @@ def imprimirDatos(idRouter, tabla):
      #print("Router: ", idRouter, "\n Tabla:",tabla)
 
 
-#Metodo que simula la operacion de RIP para cada servidor
+#Metodo que simula RIP en cada servidor
 #REQUIERE:
 #           idRouter: el ID de router que es representado por el hilo
 def cliente(idRouter):
@@ -144,12 +147,12 @@ def cliente(idRouter):
     global listasocket
     global reloj3
     global relojS
-    reloj3=datetime.utcnow()
+    actualizacion = False
+    reloj3 = datetime.utcnow()
     dir1 = " "
     dir2 = " "
     dir3 = " "
     dir4 = " "
-    #print("IPCLIENTE ", listaIPCliente[idRouter])
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((UDP_IP, UDP_PORT + idRouter))
     listasocket.append(UDP_PORT + idRouter)
@@ -171,42 +174,55 @@ def cliente(idRouter):
         direccion = list(sock.getsockname())
         a = list(addr)
         mensaje = data.decode()
-        resta= relojS- reloj3
+        resta = relojS - reloj3
         #print(resta.total_seconds())
-        if (resta.total_seconds())  > 13:
+        if (resta.total_seconds()) > 10.5:
             caido = True
         #else:
         #    print(relojS -reloj3)
         if mensaje in router or caido is True:
-            if idRouter == 1:
-                imprimirDatos(idRouter, tabla1)
-            time.sleep(.5)
-            if idRouter == 2:
-                imprimirDatos(idRouter, tabla2)
-            time.sleep(.5)
-            if idRouter == 3:
-                imprimirDatos(idRouter, tabla3)
-            time.sleep(.5)
-            if idRouter == 4:
-                imprimirDatos(idRouter, tabla4)
-            time.sleep(.5)
-            if idRouter == 5:
-                imprimirDatos(idRouter, tabla5)
-            time.sleep(.5)
+            if caido is False:
+                if idRouter == 1:
+                    imprimirDatos(idRouter, tabla1)
+                time.sleep(.5)
+                if idRouter == 2:
+                    imprimirDatos(idRouter, tabla2)
+                time.sleep(.5)
+                if idRouter == 3:
+                    imprimirDatos(idRouter, tabla3)
+                time.sleep(.5)
+                if idRouter == 4:
+                    imprimirDatos(idRouter, tabla4)
+                time.sleep(.5)
+                if idRouter == 5:
+                    imprimirDatos(idRouter, tabla5)
+                time.sleep(.5)
 
-            if caido is True and holdDown is True:
+            if caido is True or holdDown is True:
                 if idRouter == 1 and '3' in router1:
                     router1.remove('3')
-                    buscarConexiones(tabla1)
+                    actualizacion = buscarConexiones(tabla1)
+                    if actualizacion is True:
+                        imprimirDatos(idRouter, tabla1)
+                        time.sleep(.5)
                 elif idRouter == 2 and '3' in router2:
                     router2.remove('3')
-                    buscarConexiones(tabla2)
+                    actualizacion = buscarConexiones(tabla2)
+                    if actualizacion is True:
+                        imprimirDatos(idRouter, tabla2)
+                        time.sleep(.5)
                 elif idRouter == 4 and '3' in router4:
                     router4.remove('3')
-                    buscarConexiones(tabla4)
+                    actualizacion = buscarConexiones(tabla4)
+                    if actualizacion is True:
+                        imprimirDatos(idRouter, tabla4)
+                        time.sleep(.5)
                 elif idRouter == 5 and '3' in router5:
                     router5.remove('3')
-                    buscarConexiones(tabla5)
+                    actualizacion = buscarConexiones(tabla5)
+                    if actualizacion is True:
+                        imprimirDatos(idRouter, tabla5)
+                        time.sleep(.5)
 
             elif caido is False and holdDown is False:
                 if mensaje == '1' and contador < 6:
@@ -332,7 +348,7 @@ def cliente(idRouter):
 
                         dir1 = router3IPs[0]
                         red = dir1
-                        saltos = saltoR2[0] + 1
+                        saltos = saltoR3[0] + 1
                         if saltoR2[0] < saltos:
                             saltoR2[0] = saltos
                         if dir1 != " " and " " in router2IPs:
@@ -446,7 +462,7 @@ def cliente(idRouter):
     del router
 
 
-#Metodo que crea y ejecuta los hilos cliente
+#Metodo que crea y ejecuta los hilos clientes
 class threadC(threading.Thread):
     def __init__(self, thread_ID):
         threading.Thread.__init__(self)
@@ -467,14 +483,14 @@ class threadS(threading.Thread):
         servidor(self.thread_ID - 200)
 
 
-#Metodo que indica que se a realizado el tiempo de espera para el HOLDDOWN TIMER
+#Metodo que indica que ha finalizado el tiempo de espera para el HOLD TIMER
 def activarHoldDown():
     global holdDown
     holdDown = True
     print("\n---------------------------------------------------HOLD TIMER, finalizaron los 20 segundos")
 
 
-#Metodo que crea los hilos que ejecutan los servidores que envian la informacion de los routes y espera 10 segundos entre ciclos
+#Metodo que crea los hilos que ejecutan los servidores encargados de enviar la informacion de los routers y espera 10 segundos entre ciclos
 def llamarServidor():
     global contador
     global listasocket
@@ -519,6 +535,5 @@ def main():
     llamarServidor()
 
     print("Exit\n")
-
 
 if __name__ == '__main__': main()
